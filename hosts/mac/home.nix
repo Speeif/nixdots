@@ -6,7 +6,13 @@
 {
 
   modules = {
-    vscode.enable = true;
+    vscode = {
+      enable = true;
+      packs = {
+        node.enable = true;
+        flutter.enable = true;
+      };
+    };
     terminal.name = "kitty";
     cli = {
       yazi.enable = true;
