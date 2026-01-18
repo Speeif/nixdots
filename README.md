@@ -158,8 +158,7 @@ These are some sources I've used, put in chronological order for when I needed t
    - Why flakes?
    - Shows modularity
 
-> [!NOTE]
-> I feel like it's important, that if you're like me and prefer using the youtube links, that you would probably get more out of the same videos from [LibrePhoenix](https://www.youtube.com/@librephoenix).
+> An important note: I feel like it's important, that if you're like me and prefer using the youtube links, that you would probably get more out of the same videos from [LibrePhoenix](https://www.youtube.com/@librephoenix).
 >
 > I feel like theese videos might have actually been a better start for me, and hence why I'm linking them. Otherwise you can follow the above links to get the same experience as I have.
 >
