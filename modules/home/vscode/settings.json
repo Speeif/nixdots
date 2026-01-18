@@ -1,0 +1,68 @@
+{
+  "workbench.activityBar.location": "top",
+  "workbench.editor.closeOnFileDelete": true,
+  "editor.wordWrap": "on",
+  "editor.minimap.enabled": false,
+  "editor.stickyScroll.enabled": true,
+  "editor.renderWhitespace": "trailing",
+  // git
+  "git.mergeEditor": true,
+  "git.autofetch": true,
+  // formatting on save
+  "files.autoSave": "off",
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  // bracket color pairs
+  "editor.bracketPairColorization.enabled": true,
+  "editor.matchBrackets": "near",
+  "editor.guides.bracketPairs": true,
+  // hide title bar
+  "window.menuBarVisibility": "toggle", // press alt to toggle
+  "window.commandCenter": false,
+  "window.titleBarStyle": "native",
+  "window.title": "",
+  "workbench.layoutControl.enabled": false,
+
+  "explorer.autoReveal": true,
+  "[nix]": {
+    "editor.defaultFormatter": "jnoortheen.nix-ide",
+    "editor.formatOnSave": true,
+  },
+  "workbench.iconTheme": "catppuccin-mocha",
+  "workbench.colorTheme": "Catppuccin Mocha",
+  "[go]": {
+    "editor.defaultFormatter": "golang.go",
+  },
+  // Nix development configuration
+  "nix.enableLanguageServer": true,
+  "nix.formatterPath": [
+    "nixpkgs-fmt",
+    "nixfmt",
+    "treefmt",
+    "--stdin",
+    "{file}",
+    "nix",
+    "fmt",
+    "--",
+    "-",
+  ],
+  "nix.serverPath": "nixd",
+  "nix.serverSettings": {
+    "nixd": {
+      "formatting": {
+        "command": ["nixfmt"],
+      },
+      "nixpkgs": {
+        "expr": "import (builtins.getFlake \"/home/speeif/nix/flake\").inputs.nixpkgs {}",
+      },
+      "options": {
+        "home_manager": {
+          "expr": "(builtins.getFlake \"/home/speeif/nix/flake\").homeConfigurations.leasure.options",
+        },
+        "nixos": {
+          "expr": "(builtins.getFlake \"/home/speeif/nix/flake\").nixosConfigurations.laptop.options",
+        },
+      },
+    },
+  },
+}
