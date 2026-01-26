@@ -30,7 +30,7 @@
     };
     environments = [
       "gnome"
-      "cosmic"
+      "niri"
     ];
     wifi = {
       type = "base";

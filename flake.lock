@@ -55,6 +55,26 @@
         "type": "github"
       }
     },
+    "noctalia": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1769429553,
+        "narHash": "sha256-0aMA61aHUY9CVhrpSBnD8HxocbnGwXGqxzeoFhRtYu4=",
+        "owner": "noctalia-dev",
+        "repo": "noctalia-shell",
+        "rev": "d595ed4cf70c0d481ffae3e43c6a9dad049e0fc3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "noctalia-dev",
+        "repo": "noctalia-shell",
+        "type": "github"
+      }
+    },
     "private-modules": {
       "inputs": {
         "nixpkgs": [
@@ -77,11 +97,33 @@
         "url": "ssh://git@github.com/speeif/nixdots-private.git"
       }
     },
+    "quickshell": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1768985439,
+        "narHash": "sha256-qkU4r+l+UPz4dutMMRZSin64HuVZkEv9iFpu9yMWVY0=",
+        "owner": "outfoxxed",
+        "repo": "quickshell",
+        "rev": "191085a8821b35680bba16ce5411fc9dbe912237",
+        "type": "github"
+      },
+      "original": {
+        "owner": "outfoxxed",
+        "repo": "quickshell",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
-        "private-modules": "private-modules"
+        "noctalia": "noctalia",
+        "private-modules": "private-modules",
+        "quickshell": "quickshell"
       }
     },
     "systems": {

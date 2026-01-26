@@ -12,7 +12,7 @@
         nix.enable = true;
       };
     };
-    terminal.name = "ghostty";
+    terminal.name = "kitty";
     cli = {
       yazi.enable = true;
       newsboat.enable = true;

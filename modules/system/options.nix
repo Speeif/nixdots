@@ -72,6 +72,7 @@
         types.enum [
           "gnome"
           "cosmic"
+          "niri"
         ]
       );
       default = [ "gnome" ];

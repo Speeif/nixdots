@@ -8,5 +8,6 @@
     ./cli
     ./terminals
     ./fonts
+    ./suppliments # Everything else
   ];
 }

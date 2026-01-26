@@ -6,14 +6,17 @@
 }:
 let
   cfg = config.modules.terminal;
-  font = config.font;
+  font = config.modules.fonts.primary;
 in
 {
   config = lib.mkIf (cfg.name == "kitty") {
     programs.kitty = {
       enable = true;
       package = pkgs.kitty;
-      font = "${font}";
+      font = {
+        name = "${font}";
+        size = 12;
+      };
       settings = {
         confirm_os_window_close = 0; # diable check
         # dynamic_background_opacity = true;
