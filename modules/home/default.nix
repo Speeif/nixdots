@@ -8,6 +8,7 @@
     ./cli
     ./terminals
     ./fonts
-    ./suppliments # Everything else
+    ./niri-noctalia
+    ./programs
   ];
 }

@@ -12,6 +12,7 @@ in
 {
   config = lib.mkIf (builtins.elem "niri" cfg.environments) {
     programs.niri.enable = true;
+    # programs.quickshell.enable = true;
 
     environment.systemPackages = with pkgs; [
       inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
@@ -20,24 +21,10 @@ in
       tokyonight-gtk-theme
       swayimg
       rose-pine-cursor
-      pkgs.adwaita-icon-theme
-      nemo
+      adwaita-icon-theme
+      nautilus
       fuzzel
       gpu-screen-recorder
     ];
-
-    services.greetd = {
-      settings = {
-        default_session = {
-          command = "${pkgs.tuigreet}/bin/tuigreet --cmd niri-session";
-          user = "speeif";
-        };
-
-        initial_session = {
-          command = "niri-session";
-          user = "speeif";
-        };
-      };
-    };
   };
 }

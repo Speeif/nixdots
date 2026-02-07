@@ -91,6 +91,12 @@ with lib;
         };
       };
     };
+
+    programs = {
+      mpv.enable = mkEnableOption ''
+        Enables mpv configuration
+      '';
+    };
   };
 
   palette = lib.mkOption {
