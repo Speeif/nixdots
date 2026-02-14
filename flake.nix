@@ -48,7 +48,7 @@
         home-manager.flakeModules.home-manager
       ]
       ++ [
-        (import-tree ./parts) # import all flake-parts
+        (import-tree ./modules) # import all flake-parts
         # hosts
         ./hosts/laptop.nix
       ];
