@@ -1,7 +1,7 @@
 { self, ... }:
 {
   flake.nixosmOdules."default-cli" =
-    { pkgs, ... }:
+    { ... }:
     {
       imports = with self.nixosModules; [
         shell-zsh

@@ -20,6 +20,7 @@
         };
         settings =
           let
+            theme = self.themeHashed;
           in
           {
             confirm_os_window_close = 0; # diable check
@@ -33,17 +34,27 @@
             # background_opacity = "0.2";
             # background_blur = 5;
 
-            foreground = "#f8f8f2";
-            background = "#1e1e2e";
+            background = theme.base00;
+            foreground = theme.base07;
 
-            color0 = "#45475a";
-            color1 = "#f38ba8";
-            color2 = "#a6e3a1";
-            color3 = "#f9e2af";
-            color4 = "#89b4fa";
-            color5 = "#f5c2e7";
-            color6 = "#94e2d5";
-            color7 = "#bac2de";
+            cursor = theme.base07;
+
+            color0 = theme.base00;
+            color1 = theme.base08;
+            color2 = theme.base0B;
+            color3 = theme.base0A;
+            color4 = theme.base0D;
+            color5 = theme.base0E;
+            color6 = theme.base0C;
+            color7 = theme.base03;
+            color8 = theme.base02;
+            color9 = theme.base08;
+            color10 = theme.base0B;
+            color11 = theme.base0A;
+            color12 = theme.base0D;
+            color13 = theme.base0E;
+            color14 = theme.base0C;
+            color15 = theme.base03;
           };
       };
     };

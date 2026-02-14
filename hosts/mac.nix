@@ -2,7 +2,6 @@
   flakeDir,
   myLib,
   self,
-  tester,
   ...
 }:
 {

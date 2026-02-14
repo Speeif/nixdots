@@ -1,10 +1,9 @@
 {
   self,
-  tester,
   ...
 }:
 {
-  flake.nixosModules.systemBase =
+  flake.nixosModules."systemBase" =
     { pkgs, username, ... }:
     {
       # Enable flakes
@@ -53,13 +52,8 @@
       system.stateVersion = "25.11"; # ! LEAVE THIS! READ COMMENT!!!
     };
 
-  flake.homeModules.homeBase =
-    {
-      pkgs,
-      userhome,
-      username,
-      ...
-    }:
+  flake.homeModules."homeBase" =
+    { userhome, username, ... }:
     {
       imports = with self.homeModules; [
         fonts

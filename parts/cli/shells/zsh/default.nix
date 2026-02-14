@@ -1,7 +1,7 @@
 { self, ... }:
 {
   flake.nixosModules."shell-zsh" =
-    { pkgs, ... }:
+    { ... }:
     {
       environment.systemPackages = with self.nixosModules; [
         zsh

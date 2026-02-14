@@ -3,7 +3,6 @@
   flake.homeModules."vscode" =
     {
       pkgs,
-      lib,
       config,
       ...
     }:
