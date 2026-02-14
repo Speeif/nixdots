@@ -15,8 +15,6 @@ in
     # programs.quickshell.enable = true;
 
     environment.systemPackages = with pkgs; [
-      inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
-      inputs.quickshell.packages.${pkgs.stdenv.hostPlatform.system}.default
       xwayland-satellite
       tokyonight-gtk-theme
       swayimg

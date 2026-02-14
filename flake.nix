@@ -13,113 +13,44 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    quickshell = {
-      url = "github:outfoxxed/quickshell";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    noctalia = {
-      url = "github:noctalia-dev/noctalia-shell";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    import-tree.url = "github:vic/import-tree";
   };
 
   outputs =
-    {
-      nixpkgs,
+    inputs@{
+      flake-parts,
       home-manager,
+      import-tree,
       ...
-    }@inputs:
+    }:
     let
-      myLib = import ./library.nix;
-      username = "speeif";
-      hostname = "hermes";
-      flakeDir = "${builtins.getEnv "HOME"}/nix/flake";
+      myLib = import ./library.nix { inherit inputs; };
+      #? flakeDir is used for linking config files (e.g. vscode settings.json)
+      #? since the home-manager.lib.mkOutOfStoreSymlink needs a root path
+      flakeDir = "${builtins.getEnv "PWD"}";
     in
-    {
-      nixosConfigurations = {
-        "laptop" =
-          let
-            system = "x86_64-linux";
-            pkgs = myLib.mkPkgs { inherit system nixpkgs; };
-          in
-          nixpkgs.lib.nixosSystem {
-            inherit system pkgs;
-            modules = [
-              { system.stateVersion = "25.11"; } # follow nixpkgs
-              ./hosts/laptop/system.nix
-              ./modules/system
-            ];
-            specialArgs = {
-              inherit
-                system
-                username
-                hostname
-                inputs
-                ;
-            };
-          };
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = [
+        "x86_64-linux" # todo: update for "x86_64-darwin"
+      ];
+
+      _module.args = {
+        inherit
+          inputs
+          flakeDir
+          myLib
+          ;
       };
 
-      homeConfigurations = {
-        "leasure" =
-          let
-            system = "x86_64-linux";
-            pkgs = myLib.mkPkgs {
-              inherit system nixpkgs;
-              allowUnfree = [
-                "obsidian"
-                "vscode"
-              ];
-            };
-            privateModules = inputs.private-modules.homeManagerModules.${system};
-          in
-          home-manager.lib.homeManagerConfiguration {
-            modules = [
-              { home.stateVersion = "25.11"; } # follow home-manager
-              ./hosts/laptop/home.nix
-              ./modules/home
-              privateModules.default
-            ];
-            inherit pkgs;
-            extraSpecialArgs = {
-              inherit
-                system
-                username
-                hostname
-                flakeDir
-                inputs
-                ;
-            };
-          };
-
-        "mac" =
-          let
-            system = "x86_64-linux";
-            pkgs = myLib.mkPkgs {
-              inherit system nixpkgs;
-              allowUnfree = [
-                "obsidian"
-                "vscode"
-              ];
-            };
-          in
-          home-manager.lib.homeManagerConfiguration {
-            modules = [
-              { home.stateVersion = "25.11"; } # follow home-manager
-              ./hosts/mac/home.nix
-              ./modules/home
-            ];
-            inherit pkgs;
-            extraSpecialArgs = {
-              inherit
-                system
-                username
-                hostname
-                flakeDir
-                inputs
-                ;
-            };
-          };
-      };
+      imports = [
+        flake-parts.flakeModules.modules
+        home-manager.flakeModules.home-manager
+      ]
+      ++ [
+        (import-tree ./parts) # import all flake-parts
+        # hosts
+        ./hosts/laptop.nix
+      ];
     };
 }

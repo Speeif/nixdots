@@ -5,7 +5,7 @@
 # --flake cause flake
 .PHONY: home
 home:
-	home-manager switch --impure -b bak --flake .#leasure
+	home-manager switch --impure -b bak --flake .#nixos
 
 .PHONY: mac
 mac:
@@ -19,7 +19,7 @@ mac:
 # --flake cause flake
 .PHONY: system
 system:
-	nixos-rebuild switch --impure --flake .#laptop
+	nixos-rebuild switch --impure --flake .#nixos
 
 # Cleans nix home-manager cache. Run with `sudo` to clean system-level cache.
 .PHONY: clean
