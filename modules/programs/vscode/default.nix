@@ -3,11 +3,12 @@
   flake.homeModules."vscode" =
     {
       pkgs,
+      pkgs-unstable,
       config,
       ...
     }:
     let
-      mkLink = file: config.lib.file.mkOutOfStoreSymlink "${flakeDir}/parts/programs/vscode/${file}";
+      mkLink = file: config.lib.file.mkOutOfStoreSymlink "${flakeDir}/modules/programs/vscode/${file}";
     in
     {
 
@@ -23,6 +24,7 @@
 
       programs.vscode = {
         enable = true;
+        package = pkgs-unstable.vscode;
         profiles.default = {
           extensions =
             with pkgs.vscode-extensions;

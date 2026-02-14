@@ -2,6 +2,7 @@
   description = "My nixos flake with homoe manager";
 
   inputs = {
+    nixpkgs-unstable.url = "github:NixOs/nixpkgs/nixos-unstable";
     nixpkgs.url = "github:NixOs/nixpkgs/nixos-25.11";
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
@@ -47,8 +48,8 @@
         flake-parts.flakeModules.modules
         home-manager.flakeModules.home-manager
       ]
+      ++ [ (import-tree ./modules) ] # import all flake-parts
       ++ [
-        (import-tree ./modules) # import all flake-parts
         # hosts
         ./hosts/laptop.nix
       ];

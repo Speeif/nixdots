@@ -4,11 +4,12 @@ let
     {
       system,
       allowUnfree ? [ ],
+      nixpkgs ? inputs.nixpkgs,
     }:
-    import inputs.nixpkgs {
+    import nixpkgs {
       inherit system;
       # Allow only select unfree packages
-      config.allowUnfreePredicate = pkgs: builtins.elem (inputs.nixpkgs.lib.getName pkgs) allowUnfree;
+      config.allowUnfreePredicate = pkgs: builtins.elem (nixpkgs.lib.getName pkgs) allowUnfree;
     };
 
   mkHome =
@@ -23,6 +24,10 @@ let
       pkgs = mkPkgs { inherit system allowUnfree; };
       extraSpecialArgs = extraSpecialArgs // {
         inherit system inputs;
+        pkgs-unstable = mkPkgs {
+          inherit system allowUnfree;
+          nixpkgs = inputs.nixpkgs-unstable;
+        };
       };
     };
 
@@ -38,6 +43,10 @@ let
       pkgs = mkPkgs { inherit system allowUnfree; };
       specialArgs = specialArgs // {
         inherit system inputs;
+        pkgs-unstable = mkPkgs {
+          inherit system allowUnfree;
+          nixpkgs = inputs.nixpkgs-unstable;
+        };
       };
     };
 in
