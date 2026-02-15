@@ -1,4 +1,7 @@
 { ... }:
+let
+  logging = true;
+in
 {
   flake.nixosModules."boot" =
     {
@@ -20,36 +23,44 @@
         };
       };
 
-      config = {
-        boot.initrd.verbose = false;
-        boot.consoleLogLevel = 3;
-        boot.kernelParams = [
-          "splash"
-          "boot.shell_on_fail"
-          "rd.systemd.show_status=auto"
-          "quiet"
-          "udev.log_priority=3"
-        ];
-
-        boot.plymouth = {
-          enable = true;
-          theme = "${config.bootTheme}";
-          themePackages = with pkgs; [
-            # By default we would install all themes
-            (adi1090x-plymouth-themes.override {
-              selected_themes = [ "${config.bootTheme}" ];
-            })
+      config = lib.mkMerge [
+        (lib.mkIf (logging == false) {
+          boot.initrd.verbose = false;
+          boot.consoleLogLevel = 3;
+          boot.kernelParams = [
+            "splash"
+            "boot.shell_on_fail"
+            "rd.systemd.show_status=auto"
+            "quiet"
+            "udev.log_priority=3"
           ];
-        };
-        # Hide the OS choice for bootloaders.
-        # It's still possible to open the bootloader list by pressing any key
-        # It will just not appear on screen unless a key is pressed
-        boot.loader = {
-          timeout = 0;
-          systemd-boot.enable = true;
-          efi.canTouchEfiVariables = true;
-        };
-      };
+
+          boot.plymouth = {
+            enable = false;
+            theme = "${config.bootTheme}";
+            themePackages = with pkgs; [
+              # By default we would install all themes
+              (adi1090x-plymouth-themes.override {
+                selected_themes = [ "${config.bootTheme}" ];
+              })
+            ];
+          };
+        })
+        (lib.mkIf (logging == true) {
+          boot.initrd.verbose = true;
+          boot.consoleLogLevel = 4;
+        })
+        {
+          # Hide the OS choice for bootloaders.
+          # It's still possible to open the bootloader list by pressing any key
+          # It will just not appear on screen unless a key is pressed
+          boot.loader = {
+            timeout = 0;
+            systemd-boot.enable = true;
+            efi.canTouchEfiVariables = true;
+          };
+        }
+      ];
 
     };
 }

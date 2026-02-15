@@ -3,7 +3,7 @@
   ...
 }:
 let
-  inherit (self) theme;
+  theme = self.theme;
 in
 {
   flake.nixosModules."ly" =

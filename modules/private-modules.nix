@@ -4,7 +4,7 @@
     { system, ... }:
     {
       imports = [
-        inputs.private-modules.homeManagerModules.${system}.viu
+        inputs.private-modules.homeManagerModules.${system}.default
       ];
     };
 }

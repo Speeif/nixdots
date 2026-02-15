@@ -1,12 +1,5 @@
 { ... }:
 let
-  stripHash =
-    str:
-    if builtins.substring 0 1 str == "#" then
-      builtins.substring 1 (builtins.stringLength str - 1) str
-    else
-      str;
-
   # catppuccin mocha
   themeHashed = {
     base00 = "#24273a"; # base
@@ -26,7 +19,15 @@ let
     base0E = "#c6a0f6"; # mauve
     base0F = "#f0c6c6"; # flamingo
   };
-  theme = stripHash themeHashed;
+
+  stripHash =
+    str:
+    if builtins.substring 0 1 str == "#" then
+      builtins.substring 1 (builtins.stringLength str - 1) str
+    else
+      str;
+
+  theme = builtins.mapAttrs (_: v: stripHash v) themeHashed;
 in
 {
   flake = {

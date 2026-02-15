@@ -53,10 +53,19 @@
     };
 
   flake.homeModules."homeBase" =
-    { userhome, username, ... }:
+    {
+      userhome,
+      username,
+      pkgs,
+      ...
+    }:
     {
       imports = with self.homeModules; [
         fonts
+      ];
+
+      home.packages = with pkgs; [
+        firefox
       ];
 
       home = {
