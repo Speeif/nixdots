@@ -37,15 +37,16 @@ in
         modules =
           with self.nixosModules;
           [
+            # setup
             /etc/nixos/hardware-configuration.nix
             systemBase
+            niri
+            gnome
           ]
           ++ [
             # actual packages
             ly
-            niri
             kitty
-            gnome
             zsh
           ]
           ++ [
@@ -59,14 +60,16 @@ in
         modules =
           with self.homeModules;
           [
+            # setup
             homeBase
+            niri
           ]
           ++ [
             private
-            niri
             default-cli
             vscode
             kitty
+            mpv
           ];
         extraSpecialArgs = {
           inherit
