@@ -8,65 +8,71 @@
       home = config.home.homeDirectory;
       scriptName = "waybar-launcher";
       waybarLauncher = pkgs.writeShellScriptBin "${scriptName}" ''
+        #shell
         set -euo pipefail
 
-        WAYBAR_BIN="${pkgs.waybar}/bin/waybar"
         CONFIG_FILE="${home}/.config/waybar/config.jsonc"
         STYLE_FILE="${home}/.config/waybar/style.css"
 
-        start_waybar() {
-          if ${pkgs.procps}/bin/pgrep -x waybar >/dev/null; then
+        WAYBAR_BIN="${pkgs.waybar}/bin/waybar"
+        PKILL_BIN=${pkgs.procps}/bin/pkill
+        PGREP_BIN=${pkgs.procps}/bin/pgrep
+
+        start() {
+          if $PGREP_BIN -f $WAYBAR_BIN >/dev/null; then
             echo "Waybar is already running."
-            exit 0
+            return 0
           fi
 
           echo "Starting Waybar..."
-          "$WAYBAR_BIN" \
+          $WAYBAR_BIN \
             --config "$CONFIG_FILE" \
             --style "$STYLE_FILE" &
         }
 
-        stop_waybar() {
-          if ! ${pkgs.procps}/bin/pgrep -x waybar >/dev/null; then
+        stop() {
+          if ! $PGREP_BIN -f $WAYBAR_BIN >/dev/null; then
             echo "Waybar is not running."
-            exit 0
+            return 0
           fi
 
           echo "Stopping Waybar..."
-          ${pkgs.procps}/bin/pkill -x waybar
+          $PKILL_BIN -f $WAYBAR_BIN
         }
 
-        restart_waybar() {
+        restart() {
           echo "Restarting Waybar..."
-          ${pkgs.procps}/bin/pkill -x waybar 2>/dev/null || true
+          stop || true
           sleep 0.2
-          start_waybar
+          start
         }
 
         case "$1" in
           start)
-            start_waybar
+            start
             ;;
           stop)
-            stop_waybar
+            stop
             ;;
           restart)
-            restart_waybar
+            restart
             ;;
           *)
-            start_waybar 
+            start 
             ;;
         esac
       '';
 
     in
-
     {
-      home.packages = [ waybarLauncher ];
+      home.packages = with pkgs; [
+        waybarLauncher
+        bluetui
+      ];
       programs.waybar = {
         enable = true;
       };
-      xdg.configFile."waybar/config.json".source = mkLink "config.jsonc";
+      xdg.configFile."waybar/config.jsonc".source = mkLink "config.jsonc";
       xdg.configFile."waybar/style.css".source = mkLink "style.css";
       xdg.configFile."waybar/theme.css".source = mkLink "theme.css";
 
