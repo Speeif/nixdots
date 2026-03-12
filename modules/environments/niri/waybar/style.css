@@ -16,239 +16,80 @@ window#waybar {
   transition-duration: 0.5s;
 }
 
-/* --- Single Module Config's ---*/
+.module#window {
+  color: @base06;
+}
 
-#left1 {
-  background-color: @base00;
+#left1,
+#left2,
+#left3,
+#left4,
+#right1,
+#right2,
+#right3,
+#right4 {
+  background-color: @base01;
   border-radius: 8px;
-  border: 1px solid alpha(@base05, 0.15);
-  margin-right: 8px;
-}
-
-#left2 {
-  margin-right: 8px;
-}
-
-#left3 {
-  background-color: @base00;
-  border-radius: 8px;
-  border: 1px solid alpha(@base05, 0.15);
-  color: @base04;
-  margin-right: 8px;
-}
-
-#left4 {
-}
-.modules-center {
-  background-color: transparent;
-  color: @base0C;
-}
-
-#right1 {
-  background-color: @base00;
-  border-radius: 8px;
-  border: 1px solid alpha(@base05, 0.15);
-}
-
-#right2 {
-  margin-left: 8px;
-  background-color: @base00;
-  border-radius: 8px;
-  border: 1px solid alpha(@base05, 0.15);
-}
-
-window#waybar.empty #window {
-  background: transparent;
-  background-color: transparent;
-  border: none;
-  border-radius: 0;
-  color: transparent;
-  padding: 0;
+  border: 1px solid alpha(@base03, 0.65);
+  padding-left: 5px;
+  padding-right: 5px;
   margin: 0;
 }
-#waybar.empty .modules-center {
-  opacity: 0;
+
+#right1,
+#right2,
+#right3,
+#right4 {
+  margin-left: 10px;
 }
 
-#mpris {
-  background-color: @base00;
-  border-radius: 8px;
-  border: 1px solid alpha(@base05, 0.15);
-  color: @base08;
+#left1,
+#left2,
+#left3,
+#left4 {
+  margin-right: 10px;
 }
 
-/* --- Tooltip ---*/
-tooltip {
-  opacity: 1;
+.module {
+  color: @base0D;
+  background-color: transparent;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
-/* --- Workspaces --- */
+.module#custom-seperator {
+  min-width: 1px;
+  border: 0;
+  border-right: 1px solid alpha(@base05, 0.15);
+  padding: 0;
+  margin: 0;
+  margin-right: 6px;
+}
+
 #workspaces {
-  background-color: @base00;
-  border-radius: 8px;
-  border: 1px solid alpha(@base05, 0.15);
+  padding: 0;
+  margin: 0;
 }
 
 #workspaces button {
   padding: 3px;
-  border-radius: 2px;
+  padding-left: 0px;
+  margin: 0;
   background-color: transparent;
-  color: @base05;
+  color: @base07;
   opacity: 1;
 }
 
 #workspaces button.active {
-  color: @base08;
+  color: @base0A;
   opacity: 1;
 }
 
 #workspaces button.empty {
-  color: alpha(@base05, 0.4);
-  opacity: 0.45;
+  color: alpha(@base07, 0.5);
   transition: all 0.15s ease-in-out;
 }
 
 #workspaces button.empty.active {
-  color: @base08;
-}
-
-/* --- General Modules --- */
-
-#tray,
-#window,
-#mpris,
-#cpu,
-#clock,
-#battery,
-#network,
-#memory,
-#backlight,
-#bluetooth,
-#pulseaudio,
-#custom-weather,
-#custom-update,
-#idle_inhibitor,
-#custom-omarchy,
-#custom-screenrecording-indicator,
-#custom-updatespacman {
-  min-width: 16px;
-  margin: 1px 3px 1px 3px;
-  padding-left: 6px;
-  padding-right: 6px;
-}
-
-#custom-update {
-  padding-left: 3px;
-}
-
-/* --- Module-Group-Colors --- */
-
-#custom-omarchy {
-  border-radius: 0;
-  border-right: 1px solid alpha(@base05, 0.15);
-  color: @base09;
-  font-size: 14px;
-}
-
-#clock {
-  border-radius: 0;
-  border-right: 1px solid alpha(@base05, 0.15);
-  color: @base09;
-}
-
-#bluetooth {
-  border-radius: 0;
-  border-right: 1px solid alpha(@base05, 0.15);
-  color: @base0C;
-}
-
-#memory {
-  border-radius: 0;
-  border-left: 1px solid alpha(@base05, 0.15);
-}
-
-#cpu {
-  color: @base0A;
-}
-
-#battery {
-  color: @base0D;
-}
-
-#backlight {
-  color: @base0C;
-}
-
-#memory {
-  color: @base09;
-}
-
-#network {
-  color: @base0A;
-}
-
-#pulseaudio {
-  color: @base08;
-}
-
-#idle_inhibitor {
-  margin-right: 0px;
-  margin-left: 0px;
-}
-
-#tray {
-  color: @base03;
-}
-
-#custom-voxtype {
-  min-width: 12px;
-  margin: 0 0 0 7.5px;
-}
-
-#custom-voxtype.recording {
-  color: #a55555;
-}
-
-/* Specific Module */
-
-#tray > .needs-attention {
-  -gtk-icon-effect: highlight;
-  background-color: @transparent;
-}
-
-.hidden {
-  opacity: 0;
-}
-
-tooltip {
-  padding: 4px;
-  background-color: @base00;
-  border: 1px solid alpha(@base05, 0.15);
-  border-radius: 8px;
-  font-size: 12px;
-}
-tooltip label {
-  color: @base04;
-  font-weight: normal;
-}
-
-/* Specific animation Module */
-
-#custom-screenrecording-indicator {
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-  color: transparent;
-}
-
-#custom-screenrecording-indicator.active {
-  color: @base0A;
-  animation-name: blink-recording;
-  animation-duration: 0.5s;
-}
-
-@keyframes blink-recording {
-  to {
-    color: @background;
-  }
+  color: @base07;
 }

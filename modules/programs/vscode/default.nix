@@ -22,9 +22,11 @@
         pkgs.shfmt # shell formatter ()
       ];
 
+      programs.nix-ld.enable = true; # needed for some extensions ;(
+
       programs.vscode = {
         enable = true;
-        package = pkgs-unstable.vscode;
+        package = pkgs-unstable.vscode.fhs;
         profiles.default = {
           extensions =
             with pkgs.vscode-extensions;

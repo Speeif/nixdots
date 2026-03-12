@@ -14,6 +14,10 @@
         type = types.str;
         default = "";
       };
+      debug = mkOption {
+        type = types.str;
+        default = "";
+      };
     };
   };
 }

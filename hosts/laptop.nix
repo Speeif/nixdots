@@ -15,6 +15,7 @@ in
 
   imports = [
     ./base/default.nix
+    ./gpu/amd.nix
   ];
 
   flake =
@@ -39,9 +40,11 @@ in
           [
             # setup
             /etc/nixos/hardware-configuration.nix
+            gpu-amd
             systemBase
             niri
             gnome
+            gnome-keyring
           ]
           ++ [
             # actual packages

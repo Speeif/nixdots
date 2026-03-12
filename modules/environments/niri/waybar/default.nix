@@ -80,6 +80,7 @@
         start = "${scriptName} start";
         stop = "${scriptName} stop";
         restart = "${scriptName} restart";
+        debug = "GTK_DEBUG=interactive ${scriptName} restart";
       };
     };
 }

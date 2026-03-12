@@ -4,8 +4,13 @@
     { pkgs, ... }:
     {
       environment.systemPackages = with pkgs; [
-        niri
+        zathura
       ];
+
+      programs.niri = {
+        enable = true;
+        package = pkgs.niri;
+      };
     };
 
   flake.homeModules."niri" =
@@ -36,6 +41,7 @@
           wireplumber
           swaybg # wallpaper
           wlr-which-key
+          wlogout
         ];
 
         xdg.configFile."niri/config.kdl".text =
@@ -43,9 +49,25 @@
             mkMenu =
               { name, config }:
               let
+                theme = self.themeHashed;
                 configFile = pkgs.writeText "config.yaml" (
                   lib.generators.toYAML { } {
-                    anchor = "bottom-right";
+                    font = "${self.defaultFont} 12";
+                    anchor = "center";
+                    background = theme.base02;
+                    color = theme.base05;
+                    border = theme.base0D;
+                    border_width = 2;
+                    corner_r = 0;
+                    padding = 5;
+
+                    margin_left = 0;
+                    margin_right = 0;
+                    margin_top = 0;
+                    margin_bottom = 0;
+
+                    inhibit_compositor_keyboard_shortcuts = true;
+
                     menu = config;
                   }
                 );
@@ -55,9 +77,17 @@
                 exec ${lib.getExe pkgs.wlr-which-key} ${configFile}
               '';
 
-            mkBindMenu = bind: menuConfig: ''
-              ${bind} { spawn-sh "${lib.getExe (mkMenu menuConfig)}"; }
-            '';
+            mkBindMenu =
+              bind:
+              { name, config }@menuConfig:
+              ''
+                ${bind} { spawn-sh "${lib.getExe (mkMenu menuConfig)}"; }
+              '';
+            mkStartupCmd =
+              command:
+              builtins.concatStringsSep " " (
+                map (word: "\"${word}\"") (builtins.filter builtins.isString (builtins.split " " command))
+              );
           in
           builtins.concatStringsSep "\n" [
             # description
@@ -75,7 +105,7 @@
               // which may be more convenient to use.
               // See the binds section below for more spawn examples.
 
-              spawn-at-startup "waybar_launcher" "start"
+              spawn-at-startup ${mkStartupCmd config.niri-commands.bar.start}
             ''
             ''
               binds {
@@ -97,6 +127,11 @@
                   key = "3";
                   desc = "Restart";
                   cmd = "${restart}";
+                }
+                {
+                  key = "4";
+                  desc = "Debug";
+                  cmd = "${debug}";
                 }
               ];
             })
