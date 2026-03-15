@@ -9,6 +9,7 @@ let
     "vscode"
     "vscode-extension-fill-labs-dependi"
     "obsidian"
+    "code"
   ];
 in
 {

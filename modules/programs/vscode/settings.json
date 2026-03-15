@@ -77,4 +77,15 @@
     },
     "editor.suggest.insertMode": "replace",
   },
+  "omnisharp.useModernNet": true,
+  "dotnetAcquisitionExtension.existingDotnetPath": [
+    {
+      "extensionId": "ms-dotnettools.csharp",
+      "path": "/nix/store/msq6k9knc3iq0arjw6pdq1vwliqnrc7z-dotnet-sdk-wrapped-10.0.103/bin/dotnet",
+    },
+  ],
+  "razor.dotnetPath": "/nix/store/msq6k9knc3iq0arjw6pdq1vwliqnrc7z-dotnet-sdk-wrapped-10.0.103/bin/dotnet",
+  "[csharp]": {
+    "editor.defaultFormatter": "ms-dotnettools.csharp",
+  },
 }

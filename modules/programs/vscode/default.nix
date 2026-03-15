@@ -20,9 +20,10 @@
         pkgs.nixd # language server
         pkgs.nixfmt-rfc-style # formatter
         pkgs.shfmt # shell formatter ()
+        pkgs.nix-direnv
+        pkgs.direnv
+        pkgs.nix-ld
       ];
-
-      programs.nix-ld.enable = true; # needed for some extensions ;(
 
       programs.vscode = {
         enable = true;
