@@ -14,6 +14,17 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    wrapperModules = {
+      url = "github:BirdeeHub/nix-wrapper-modules";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    wrappers = {
+      url = "github:Lassulus/wrappers/3819a607b845cc1ef492a6682970b17ac83ebdaf?narHash=sha256-AkOIcYzvVtoLQzrvdEeSEH/dvgVxvbJcKpKGHu8l67w%3D";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # Dendritic imports
     flake-parts.url = "github:hercules-ci/flake-parts";
     import-tree.url = "github:vic/import-tree";
   };
@@ -39,10 +50,23 @@
       _module.args = {
         inherit
           inputs
-          flakeDir
           myLib
           ;
+        flakeDir = "/home/speeif/nix/flake";
       };
+
+      perSystem =
+        { system, ... }:
+        {
+          _module.args = {
+            pkgs = import inputs.nixpkgs {
+              inherit system;
+            };
+            pkgs-unstable = import inputs.nixpkgs-unstable {
+              inherit system;
+            };
+          };
+        };
 
       imports = [
         flake-parts.flakeModules.modules

@@ -74,6 +74,7 @@ in
             vscode
             kitty
             mpv
+            obsidian
           ];
         extraSpecialArgs = {
           inherit

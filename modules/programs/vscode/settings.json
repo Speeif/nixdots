@@ -30,7 +30,6 @@
 
   // theme
   "workbench.iconTheme": "catppuccin-mocha",
-  "workbench.colorTheme": "Catppuccin Mocha",
   "[go]": {
     "editor.defaultFormatter": "golang.go",
   },
@@ -88,4 +87,5 @@
   "[csharp]": {
     "editor.defaultFormatter": "ms-dotnettools.csharp",
   },
+  "explorer.confirmDragAndDrop": false,
 }

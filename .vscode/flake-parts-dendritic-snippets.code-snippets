@@ -1,0 +1,66 @@
+{
+  // Place your flake workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and
+  // description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope
+  // is left empty or omitted, the snippet gets applied to all languages. The prefix is what is
+  // used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+  // $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders.
+  // Placeholders with the same ids are connected.
+  // Example:
+  // "Print to console": {
+  // 	"scope": "javascript,typescript",
+  // 	"prefix": "log",
+  // 	"body": [
+  // 		"console.log('$1');",
+  // 		"$2"
+  // 	],
+  // 	"description": "Log output to console"
+  // }
+  //
+  // You can also restrict snippets to specific files using include/exclude patterns:
+  // "Test snippet": {
+  // 	"scope": "javascript,typescript",
+  // 	"prefix": "test",
+  // 	"body": "test('$1', () => {\n\t$0\n});",
+  // 	"include": ["**/*.test.ts", "*.spec.ts"],
+  // 	"exclude": ["**/temp/*.ts"],
+  // 	"description": "Insert test block"
+  // }
+  "dentritic module": {
+    "prefix": "dendritic",
+    "body": [
+      "{",
+      "  flakeDir,",
+      "  inputs,",
+      "  self,",
+      "}:",
+      "let",
+      "  moduleName = \"$1\";",
+      "in",
+      "{",
+      "  flake.homeModules.\"\\${moduleName}\" =",
+      "\t{ pkgs, config, ... }:",
+      "\t{",
+      "\t  programs.$2 = {",
+      "\t\tenable = true;",
+      "\t\tpackage = self.packages.${pkgs.stdenv.hostPlatform.system}.\"\\${moduleName}\";",
+      "\t  };",
+      "\t};",
+      "",
+      "  perSystem =",
+      "\t{",
+      "\t  pkgs,",
+      "\t  self',",
+      "\t  lib,",
+      "\t  ...",
+      "\t}:",
+      "\t{",
+      "\t  packages.\"\\${moduleName}\" = inputs.wrapperModules.wrappers.$2.wrap {",
+      "\t\tinherit pkgs;",
+      "\t\t$0",
+      "\t  };",
+      "\t};",
+      "}",
+    ],
+    "description": "Creates a module using the dendritic pattern using flake-parts",
+  },
+}

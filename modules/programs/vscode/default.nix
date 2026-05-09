@@ -13,7 +13,6 @@
     {
 
       xdg.configFile."Code/User/settings.json".source = mkLink "settings.json";
-
       xdg.configFile."Code/User/keybindings.json".source = mkLink "keybindings.json";
 
       home.packages = [

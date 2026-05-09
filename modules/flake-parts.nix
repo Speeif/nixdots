@@ -1,4 +1,4 @@
-{ ... }:
+{ inputs, ... }:
 let
   # catppuccin mocha
   themeHashed = {
@@ -30,7 +30,17 @@ let
   theme = builtins.mapAttrs (_: v: stripHash v) themeHashed;
 in
 {
-  flake = {
-    inherit theme themeHashed;
+  options = {
+    flake = inputs.flake-parts.lib.mkSubmoduleOptions {
+      wrapperModules = inputs.nixpkgs.lib.mkOption {
+        default = { };
+      };
+    };
+  };
+
+  config = {
+    flake = {
+      inherit theme themeHashed;
+    };
   };
 }
