@@ -1,172 +1,29 @@
 {
   self,
+  self',
   inputs,
   ...
 }:
+let
+  moduleName = "myNiri";
+in
 {
-  flake.nixosModules."niri" =
-    { pkgs, ... }:
+  flake.nixosModules."${moduleName}" =
+    { pkgs, config, ... }:
     {
-      environment.systemPackages = with pkgs; [
-        zathura
-      ];
-
+      security.polkit.enable = true; # polkit
       programs.niri = {
         enable = true;
-        package = pkgs.niri;
+        package = self'.packages."${moduleName}";
       };
     };
 
-  flake.homeModules."niri" =
-    {
-      pkgs,
-      config,
-      lib,
-      ...
-    }:
-    {
-      imports = with self.homeModules; [
-        niri-waybar
-        niri-mako
-        niri-fuzzel
-        niri-swaylock
-      ];
-
-      options = import ./_options.nix { inherit lib; };
-
-      config = {
-
-        services.swayidle.enable = true; # idle management daemon
-        services.polkit-gnome.enable = true; # polkit
-
-        home.packages = with pkgs; [
-          brightnessctl
-          playerctl
-          wireplumber
-          swaybg # wallpaper
-          wlr-which-key
-          wlogout
-        ];
-
-        xdg.configFile."niri/config.kdl".text =
-          let
-            mkMenu =
-              { name, config }:
-              let
-                theme = self.themeHashed;
-                configFile = pkgs.writeText "config.yaml" (
-                  lib.generators.toYAML { } {
-                    font = "${self.defaultFont} 12";
-                    anchor = "center";
-                    background = theme.base02;
-                    color = theme.base05;
-                    border = theme.base0D;
-                    border_width = 2;
-                    corner_r = 0;
-                    padding = 5;
-
-                    margin_left = 0;
-                    margin_right = 0;
-                    margin_top = 0;
-                    margin_bottom = 0;
-
-                    inhibit_compositor_keyboard_shortcuts = true;
-
-                    menu = config;
-                  }
-                );
-              in
-              # make spaced name dash seperated
-              pkgs.writeShellScriptBin "${builtins.replaceStrings [ " " ] [ "-" ] name}" ''
-                exec ${lib.getExe pkgs.wlr-which-key} ${configFile}
-              '';
-
-            mkBindMenu =
-              bind:
-              { name, config }@menuConfig:
-              ''
-                ${bind} { spawn-sh "${lib.getExe (mkMenu menuConfig)}"; }
-              '';
-            mkStartupCmd =
-              command:
-              builtins.concatStringsSep " " (
-                map (word: "\"${word}\"") (builtins.filter builtins.isString (builtins.split " " command))
-              );
-          in
-          builtins.concatStringsSep "\n" [
-            # description
-            ''
-              // This config is in the KDL format: https://kdl.dev
-              // "/-" comments out the following node.
-              // Check the wiki for a full description of the configuration:
-              // https://yalter.github.io/niri/Configuration:-Introduction
-
-            ''
-            # Spawn processes
-            ''
-              // Add lines like this to spawn processes at startup.
-              // Note that running niri as a session supports xdg-desktop-autostart,
-              // which may be more convenient to use.
-              // See the binds section below for more spawn examples.
-
-              spawn-at-startup ${mkStartupCmd config.niri-commands.bar.start}
-            ''
-            ''
-              binds {
-            ''
-            (mkBindMenu "Mod+B" {
-              name = "Waybar options";
-              config = with config.niri-commands.bar; [
-                {
-                  key = "1";
-                  desc = "Start";
-                  cmd = "${start}";
-                }
-                {
-                  key = "2";
-                  desc = "Stop";
-                  cmd = "${stop}";
-                }
-                {
-                  key = "3";
-                  desc = "Restart";
-                  cmd = "${restart}";
-                }
-                {
-                  key = "4";
-                  desc = "Debug";
-                  cmd = "${debug}";
-                }
-              ];
-            })
-            (builtins.readFile ./keybinds.kdl)
-            ''
-              }
-            ''
-            #! spawn kitty terminal at start up for exit strategy
-            ''
-              spawn-at-startup "bash" "-c" "kitty" "&" "disown" 
-            ''
-            # Base variablse
-            ''
-              prefer-no-csd // no client side decorations
-              screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
-            ''
-            # add remaining configuration files
-            (builtins.readFile ./design.kdl)
-            (builtins.readFile ./input.kdl)
-            (builtins.readFile ./monitors.kdl)
-            (builtins.readFile ./window-rules.kdl)
-          ];
-      };
-    };
-
-  flake.nixosModules."myNiri" =
-    { pkgs, ... }:
+  flake.homeModules."${moduleName}" =
+    { ... }:
     {
       programs.niri = {
         enable = true;
-        package = self.packages.${pkgs.stdenv.hostPlatform.system}.testNiri;
+        packages = self'.packages.testNiri;
       };
     };
 
@@ -178,7 +35,7 @@
       ...
     }:
     {
-      packages."testNiri" = inputs.wrapperModules.wrappers.niri.wrap {
+      packages."${moduleName}" = inputs.wrapperModules.wrappers.niri.wrap {
         inherit pkgs;
         settings = {
           xwayland-satellite.path = lib.getExe pkgs.xwayland-satellite;
@@ -205,7 +62,7 @@
             (lib.getExe pkgs.kitty)
             (lib.getExe pkgs.kitty)
             (lib.getExe pkgs.mako)
-            (lib.getExe self'.packages.testWaybar)
+            (lib.getExe self'.packages."niri-waybar")
           ];
 
           layout = {
@@ -305,49 +162,63 @@
                     hotkey-overlay-title = "Application launcher: Fuzzed";
                   };
                   content = {
-                    spawn-sh = lib.getExe pkgs.fuzzel;
+                    spawn-sh = lib.getExe self'.packages."niri-fuzzel";
                   };
                 };
                 "Mod+B".spawn-sh =
                   let
                     pgrep = lib.getExe' pkgs.procps "pgrep";
                     pkill = lib.getExe' pkgs.procps "pkill";
-                    waybar = lib.getExe self'.packages.testWaybar;
-                    #
-                    maybeStart = "${pgrep} -f ${waybar} || ${lib.getExe pkgs.bash} ${waybar} &";
-                    maybeStop = "${pgrep} -f ${waybar} && ${pkill} -f ${waybar}";
-
-                    launcher = pkgs.writeShellScriptBin "abekatten-hugo444" ''
+                    waybar = lib.getExe self'.packages."niri-waybar";
+                    launcher = pkgs.writeShellScriptBin "waybar-launcher" ''
                       set -euo pipefail
 
-                      WAYBAR=${waybar}
-                      PKILL=${pkill}
-                      PGREP=${pgrep}
+                      case "$1" in
+                        start)
+                          if ${pgrep} -f ${waybar} >/dev/null; then
+                            echo "Waybar already running."
+                            exit 0
+                          fi
 
-                      START2="${maybeStart}"
-                      STOP2="${maybeStop}"
+                          echo "Starting waybar..." 
+                          ${waybar}
+                          ;;
+                        stop)
+                          if ! ${pgrep} -f ${waybar} >/dev/null; then
+                            echo "Waybar is not running."
+                            exit 0
+                          fi
+
+                          ${pkill} -f ${waybar}
+                          ;;
+                        *)
+                          echo "Not a valid launch command, use 'start' 'stop' or 'restart'."
+                          ;;
+                      esac
                     '';
+                    launcherExe = lib.getExe launcher;
+
                   in
                   self.mkWhichKeyExe pkgs [
                     {
                       key = "1";
                       desc = "Start";
-                      cmd = maybeStart;
+                      cmd = "${launcherExe} start";
                     }
                     {
                       key = "2";
                       desc = "Stop";
-                      cmd = maybeStop;
+                      cmd = "${launcherExe} stop";
                     }
                     {
                       key = "3";
                       desc = "Restart";
-                      cmd = "${maybeStop}; ${maybeStart}";
+                      cmd = "${launcherExe} stop; ${launcherExe} start";
                     }
                     {
                       key = "4";
                       desc = "Debug";
-                      cmd = "${launcher} stop && GTK_DEBUG=interactive && ${maybeStart}";
+                      cmd = "${launcherExe} stop && GTK_DEBUG=interactive ${launcherExe} start";
                     }
                   ];
                 "Mod+Q" = mkNoRepeat {
