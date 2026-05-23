@@ -29,17 +29,50 @@ in
         settings =
           let
             launchTui = tui: "bash -c \"${lib.getExe pkgs.kitty} -e ${tui}\"";
+            progressIcons = [
+              "󰝦"
+              "󰪞"
+              "󰪟"
+              "󰪠"
+              "󰪡"
+              "󰪢"
+              "󰪣"
+              "󰪤"
+              "󰪥"
+            ];
           in
           {
             reload_style_on_change = true;
             layer = "top";
             position = "top";
             mod = "dock";
-            margin-top = 3;
             height = 24;
-            margin-left = 5;
-            margin-right = 5;
             margin-bottom = 0;
+            margin-left = 0;
+            margin-right = 0;
+            margin-top = 0;
+
+            modules-left = [
+              "group/left1"
+              "group/left2"
+              "group/left3"
+            ];
+            modules-center = [
+              "niri/window"
+            ];
+            modules-right = [
+              "bluetooth"
+              "backlight"
+              "custom/seperator"
+              "pulseaudio#output"
+              "custom/microphone"
+              "custom/seperator"
+              "network"
+              "memory"
+              "cpu"
+              "battery"
+            ];
+
             "group/left1" = {
               orientation = "inherit";
               modules = [
@@ -60,39 +93,6 @@ in
               orientation = "inherit";
               modules = [
                 "mpris"
-              ];
-            };
-            modules-left = [
-              "group/left1"
-              "group/left2"
-              "group/left3"
-            ];
-            modules-center = [
-              "niri/window"
-            ];
-            modules-right = [
-              "group/right1"
-              "group/right2"
-            ];
-            "group/right1" = {
-              orientation = "inherit";
-              modules = [
-                "tray"
-              ];
-            };
-            "group/right2" = {
-              orientation = "inherit";
-              modules = [
-                "bluetooth"
-                "backlight"
-                "network"
-                "custom/seperator"
-                "pulseaudio#output"
-                "custom/microphone"
-                "custom/seperator"
-                "memory"
-                "cpu"
-                "battery"
               ];
             };
             "hyprland/workspaces" = {
@@ -140,33 +140,13 @@ in
             cpu = {
               interval = 1;
               format = "CPU {icon}";
-              format-icons = [
-                "󰝦"
-                "󰪞"
-                "󰪟"
-                "󰪠"
-                "󰪡"
-                "󰪢"
-                "󰪣"
-                "󰪤"
-                "󰪥"
-              ];
+              format-icons = progressIcons;
               on-click = launchTui "${lib.getExe pkgs.btop}";
             };
             memory = {
               interval = 1;
               format = "MEM {icon}";
-              format-icons = [
-                "󰝦"
-                "󰪞"
-                "󰪟"
-                "󰪠"
-                "󰪡"
-                "󰪢"
-                "󰪣"
-                "󰪤"
-                "󰪥"
-              ];
+              format-icons = progressIcons;
               max-length = 10;
               on-click = launchTui "${lib.getExe pkgs.btop}";
             };
@@ -174,17 +154,7 @@ in
               format = "BAT {icon}";
               format-discharging = "BAT {icon}";
               format-charging = "BAT^ {icon}";
-              format-icons = [
-                "󰝦"
-                "󰪞"
-                "󰪟"
-                "󰪠"
-                "󰪡"
-                "󰪢"
-                "󰪣"
-                "󰪤"
-                "󰪥"
-              ];
+              format-icons = progressIcons;
               format-full = "";
               tooltip-format-discharging = "{timeTo}";
               tooltip-format-charging = "{timeTo}";
@@ -195,7 +165,7 @@ in
               };
             };
             clock = {
-              format = "{:%H:%M %a} ";
+              format = "{:%H:%M %a}";
               format-alt = " {:%d/%m/%Y  %H:%M:%S}";
               tooltip-format = "<span>{calendar}</span>";
               calendar = {
@@ -219,20 +189,10 @@ in
             };
             network = {
               format = "NET {icon}";
-              format-icons = [
-                "󰝦"
-                "󰪞"
-                "󰪟"
-                "󰪠"
-                "󰪡"
-                "󰪢"
-                "󰪣"
-                "󰪤"
-                "󰪥"
-              ];
+              format-icons = progressIcons;
               format-wifi = "NET {icon}";
               format-ethernet = "ETH";
-              format-disconnected = "X";
+              format-disconnected = "NET X";
               tooltip-format-wifi = "{essid} ({frequency} GHz)\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}";
               tooltip-format-ethernet = "⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}";
               tooltip-format-disconnected = "Disconnected";
@@ -241,27 +201,23 @@ in
               on-click = launchTui "${lib.getExe' pkgs.networkmanager "nmtui"}";
             };
             bluetooth = {
-              format = "";
-              format-disabled = "󰂲";
-              format-off = "󰂲";
-              format-connected = "";
+              format = "BT {icon}";
+              format-icons = progressIcons;
+              format-disabled = "BT /";
+              format-off = "BT X";
+              format-connected = "BT 󰪥";
               tooltip-format = "Devices connected: {num_connections}";
               on-click = launchTui "${lib.getExe pkgs.bluetui}";
+              on-click-right =
+                let
+                  bluetoothctl = "${lib.getExe' pkgs.bluez "bluetoothctl"}";
+                in
+                "${bluetoothctl} power $(${bluetoothctl} show | ${lib.getExe pkgs.gnugrep} -q \"Powered: yes\" && echo off || echo on)";
             };
             backlight = {
               device = "intel_backlight";
               format = "SCR {icon}";
-              format-icons = [
-                "󰝦"
-                "󰪞"
-                "󰪟"
-                "󰪠"
-                "󰪡"
-                "󰪢"
-                "󰪣"
-                "󰪤"
-                "󰪥"
-              ];
+              format-icons = progressIcons;
               tooltip-format = "Screen light: {percent}%";
             };
             "pulseaudio#output" = {
@@ -269,17 +225,7 @@ in
               tooltip-format = "Volume: {volume}%";
               format-muted = "SND X";
               format-bluetooth = "HDST {icon}";
-              format-icons = [
-                "󰝦"
-                "󰪞"
-                "󰪟"
-                "󰪠"
-                "󰪡"
-                "󰪢"
-                "󰪣"
-                "󰪤"
-                "󰪥"
-              ];
+              format-icons = progressIcons;
               max-volume = 100;
               scroll-step = 2;
               smooth-scrolling-threshold = 1;
@@ -303,10 +249,11 @@ in
                 "7" = "󰪤";
                 "8" = "󰪥";
                 muted = "X";
-                on-scroll-down = "wpctl set-volume @DEFAULT_SOURCE@ 5%- >/dev/null && echo '{\"text\":\"NO\"}'";
-                on-scroll-up = "wpctl set-volume @DEFAULT_SOURCE@ 5%+ >/dev/null && echo '{\"text\":\"NO\"}'";
-                on-click = "kitty --class=pavucontrol -e pavucontrol";
               };
+              on-click-right = "${lib.getExe' pkgs.wireplumber "wpctl"} set-mute @DEFAULT_SOURCE@ toggle";
+              on-scroll-down = "${lib.getExe' pkgs.wireplumber "wpctl"} set-volume @DEFAULT_SOURCE@ 5%-";
+              on-scroll-up = "${lib.getExe' pkgs.wireplumber "wpctl"} set-volume @DEFAULT_SOURCE@ 5%+";
+              on-click = "${lib.getExe pkgs.pavucontrol}";
             };
             tray = {
               icon-size = 12;
@@ -318,7 +265,7 @@ in
             mpris = {
               format = "󰋎 {artist} - {title}";
               format-paused = "<i>{status_icon} {artist}</i>";
-              max-length = 20;
+              max-length = 35;
               player-icons = {
                 default = "⏸";
                 mpv = "🎵";
@@ -327,7 +274,6 @@ in
                 paused = "󰋐";
               };
               ignored-players = [
-                "firefox"
                 "chromium"
                 "brave"
               ];

@@ -7,6 +7,8 @@
   font-size: 12px;
   font-weight: bold;
   min-height: 0px;
+  color: @base06;
+  padding: 0;
 }
 
 /* --- Waybar ---*/
@@ -16,27 +18,22 @@ window#waybar {
   transition-duration: 0.5s;
 }
 
-.module#window {
-  color: @base06;
-}
-
-#left1,
-#left2,
-#left3,
-#left4,
-#right1,
-#right2,
-#right3,
-#right4 {
+.module:not(#window) {
   background-color: @base01;
-  border-radius: 8px;
-  border: 1px solid alpha(@base03, 0.65);
+  border-top: 1px solid alpha(@base03, 0.65);
+  border-bottom: 1px solid alpha(@base03, 0.65);
   padding-left: 5px;
   padding-right: 5px;
+}
+
+.module#custom-seperator {
+  min-width: 1px;
+  border-right: 1px solid alpha(@base05, 0.15);
+  padding: 0;
   margin: 0;
 }
 
-#right1,
+/* #right1,
 #right2,
 #right3,
 #right4 {
@@ -55,15 +52,6 @@ window#waybar {
   background-color: transparent;
   padding-left: 5px;
   padding-right: 5px;
-}
-
-.module#custom-seperator {
-  min-width: 1px;
-  border: 0;
-  border-right: 1px solid alpha(@base05, 0.15);
-  padding: 0;
-  margin: 0;
-  margin-right: 6px;
 }
 
 #workspaces {
@@ -93,3 +81,4 @@ window#waybar {
 #workspaces button.empty.active {
   color: @base07;
 }
+ */
