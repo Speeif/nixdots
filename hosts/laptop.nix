@@ -43,7 +43,7 @@ in
             /etc/nixos/hardware-configuration.nix
             gpu-amd
             systemBase
-            niri
+            myNiri
             gnome
             gnome-keyring
           ]
@@ -66,7 +66,10 @@ in
           [
             # setup
             homeBase
-            niri
+          ]
+          ++ [
+            # Environments
+            myNiri
           ]
           ++ [
             private
