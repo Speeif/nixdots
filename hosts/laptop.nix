@@ -68,10 +68,6 @@ in
             homeBase
           ]
           ++ [
-            # Environments
-            myNiri
-          ]
-          ++ [
             private
             default-cli
             vscode
