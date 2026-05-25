@@ -1,6 +1,7 @@
 {
   inputs,
   self,
+  self',
   theme,
   ...
 }:
@@ -13,7 +14,7 @@ in
     {
       programs.fuzzel = {
         enable = true;
-        package = self.packages.${pkgs.stdenv.hostPlatform.system}."${moduleName}";
+        package = self'.packages."${moduleName}";
       };
     };
 
@@ -22,7 +23,7 @@ in
     {
       programs.fuzzel = {
         enable = true;
-        package = self.packages.${pkgs.stdenv.hostPlatform.system}."${moduleName}";
+        package = self'.packages."${moduleName}";
       };
     };
 

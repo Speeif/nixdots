@@ -45,27 +45,26 @@ in
     }
   );
 
-  flake.mkWhichKeyExe =
+  flake.mkWhichKey =
     pkgs: menu:
-    lib.getExe
-      (self.wrapperModules."wrapped-which-key".apply {
-        inherit pkgs menu;
-        settings = {
-          font = "JetBrainsMono Nerd Font 12";
-          anchor = "center";
-          background = theme.base02;
-          color = theme.base05;
-          border = theme.base0D;
-          border_width = 2;
-          corner_r = 0;
-          padding = 5;
+    (self.wrapperModules."wrapped-which-key".apply {
+      inherit pkgs menu;
+      settings = {
+        font = "JetBrainsMono Nerd Font 12";
+        anchor = "center";
+        background = theme.base02;
+        color = theme.base05;
+        border = theme.base0D;
+        border_width = 2;
+        corner_r = 0;
+        padding = 5;
 
-          margin_left = 0;
-          margin_right = 0;
-          margin_top = 0;
-          margin_bottom = 0;
+        margin_left = 0;
+        margin_right = 0;
+        margin_top = 0;
+        margin_bottom = 0;
 
-          inhibit_compositor_keyboard_shortcuts = true;
-        };
-      }).wrapper;
+        inhibit_compositor_keyboard_shortcuts = true;
+      };
+    }).wrapper;
 }

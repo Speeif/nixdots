@@ -2,6 +2,7 @@
   flakeDir,
   inputs,
   self,
+  self',
   ...
 }:
 let
@@ -13,7 +14,7 @@ in
     {
       programs.waybar = {
         enable = true;
-        package = self.packages.${pkgs.stdenv.hostPlatform.system}."${moduleName}";
+        package = self'.packages "${moduleName}";
       };
     };
 

@@ -1,6 +1,5 @@
 {
   self,
-  self',
   inputs,
   ...
 }:
@@ -12,24 +11,19 @@ in
     { pkgs, config, ... }:
     {
       security.polkit.enable = true; # polkit
-      programs.niri = {
-        enable = true;
-        package = self'.packages."${moduleName}";
-      };
-    };
+      environment.systemPackages = with pkgs; [
 
-  flake.homeModules."${moduleName}" =
-    { ... }:
-    {
+      ];
       programs.niri = {
         enable = true;
-        packages = self'.packages.testNiri;
+        package = self.packages."${pkgs.stdenv.hostPlatform.system}"."${moduleName}";
       };
     };
 
   perSystem =
     {
       pkgs,
+      config,
       lib,
       self',
       ...
@@ -165,62 +159,40 @@ in
                     spawn-sh = lib.getExe self'.packages."niri-fuzzel";
                   };
                 };
-                "Mod+B".spawn-sh =
+                "Mod+B" =
+                  _:
                   let
-                    pgrep = lib.getExe' pkgs.procps "pgrep";
                     pkill = lib.getExe' pkgs.procps "pkill";
                     waybar = lib.getExe self'.packages."niri-waybar";
-                    launcher = pkgs.writeShellScriptBin "waybar-launcher" ''
-                      set -euo pipefail
-
-                      case "$1" in
-                        start)
-                          if ${pgrep} -f ${waybar} >/dev/null; then
-                            echo "Waybar already running."
-                            exit 0
-                          fi
-
-                          echo "Starting waybar..." 
-                          ${waybar}
-                          ;;
-                        stop)
-                          if ! ${pgrep} -f ${waybar} >/dev/null; then
-                            echo "Waybar is not running."
-                            exit 0
-                          fi
-
-                          ${pkill} -f ${waybar}
-                          ;;
-                        *)
-                          echo "Not a valid launch command, use 'start' 'stop' or 'restart'."
-                          ;;
-                      esac
-                    '';
-                    launcherExe = lib.getExe launcher;
-
+                    start = "exec ${waybar} &";
+                    stop = "${pkill} -f ${waybar} >/dev/null";
+                    launcher = self.mkWhichKey pkgs [
+                      {
+                        key = "1";
+                        desc = "Start";
+                        cmd = "${start}";
+                      }
+                      {
+                        key = "2";
+                        desc = "kill";
+                        cmd = "${stop}";
+                      }
+                      {
+                        key = "3";
+                        desc = "Debug";
+                        cmd = "GTK_DEBUG=interactive ${start}";
+                      }
+                    ];
                   in
-                  self.mkWhichKeyExe pkgs [
-                    {
-                      key = "1";
-                      desc = "Start";
-                      cmd = "${launcherExe} start";
-                    }
-                    {
-                      key = "2";
-                      desc = "Stop";
-                      cmd = "${launcherExe} stop";
-                    }
-                    {
-                      key = "3";
-                      desc = "Restart";
-                      cmd = "${launcherExe} stop; ${launcherExe} start";
-                    }
-                    {
-                      key = "4";
-                      desc = "Debug";
-                      cmd = "${launcherExe} stop && GTK_DEBUG=interactive ${launcherExe} start";
-                    }
-                  ];
+                  {
+                    props = {
+                      repeat = false;
+                      hotkey-overlay-title = "Waybar options";
+                    };
+                    content = {
+                      spawn-sh = lib.getExe launcher;
+                    };
+                  };
                 "Mod+Q" = mkNoRepeat {
                   close-window = _: { };
                 };
