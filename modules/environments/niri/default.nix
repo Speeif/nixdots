@@ -33,6 +33,7 @@ in
         inherit pkgs;
         settings = {
           xwayland-satellite.path = lib.getExe pkgs.xwayland-satellite;
+          prefer-no-csd = true;
           input = {
             keyboard = {
               xkb.layout = "dk";
@@ -75,7 +76,7 @@ in
             };
 
             focus-ring = {
-              width = 8;
+              width = 6;
               active-color = self.themeHashed.base0D;
               inactive-color = self.themeHashed.base03;
             };
@@ -116,9 +117,9 @@ in
           # NIX:
           # "XF86AudioRaiseVolume" = _: {
           #   props = { allow-when-locked = true; };
-          #   content = { spawn-sh = "${wpctl} set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0";
-          #     };
-          #   };
+          #   content = { spawn-sh = "${wpctl} set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0"; };
+          # };
+          # KDL: XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0"; }
           binds =
             let
               mkNoRepeat = content: _: {
@@ -193,13 +194,58 @@ in
                       spawn-sh = lib.getExe launcher;
                     };
                   };
+
+                "Shift+Mod+Print" = _: {
+                  props = {
+                    hotkey-overlay-title = "Take screenshot";
+                  };
+                  content =
+                    let
+                      grim = lib.getExe pkgs.grim;
+                      wlCopy = lib.getExe' pkgs.wl-clipboard "wl-copy";
+                    in
+                    {
+                      spawn-sh = "${grim} -l 0 - | ${wlCopy}";
+                    };
+                };
+
+                "Print" = _: {
+                  props = {
+                    hotkey-overlay-title = "Screenshot manager";
+                  };
+                  content =
+                    let
+                      grim = lib.getExe pkgs.grim;
+                      wlCopy = lib.getExe' pkgs.wl-clipboard "wl-copy";
+                      slurp = lib.getExe pkgs.slurp;
+                      launcher = self.mkWhichKey pkgs [
+                        {
+                          key = "1";
+                          desc = "Boundery";
+                          cmd = "${grim} -g $(${slurp}) - | ${wlCopy}";
+                        }
+                        {
+                          key = "2";
+                          desc = "Fullscreen";
+                          cmd = "${grim} -l 0 - | ${wlCopy}";
+                        }
+                      ];
+                    in
+                    {
+                      spawn-sh = lib.getExe launcher;
+                    };
+                };
+
                 "Mod+Q" = mkNoRepeat {
                   close-window = _: { };
                 };
               }
-              # media keybinds
+              # SCREENSHOTS
               {
 
+              }
+              # media keybinds
+              {
                 "XF86AudioRaiseVolume" = mkAllowedWhenLocked {
                   spawn-sh = "${wpctl} set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0";
                 };
@@ -274,10 +320,7 @@ in
                 "Mod+Shift+F".fullscreen-window = _: { };
                 "Mod+V".toggle-window-floating = _: { };
 
-                "Ctrl+Shift+Delete".quit = _: { };
-
-                "Shift+Mod+Print".spawn-sh =
-                  "${lib.getExe pkgs.grim} -l 0 - | ${lib.getExe' pkgs.wl-clipboard "wl-copy"}";
+                "Mod+Shift+E".quit = _: { };
               }
             ];
         };
