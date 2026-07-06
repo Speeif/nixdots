@@ -16,7 +16,8 @@
     extraSpecialArgs ? {},
   }:
     inputs.home-manager.lib.homeManagerConfiguration {
-      inherit modules;
+      #? added nix.nixPath for lsp
+      modules =  modules ++ [{ nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];}];
       pkgs = mkPkgs {inherit system allowUnfree;};
       extraSpecialArgs =
         extraSpecialArgs
@@ -35,7 +36,9 @@
     specialArgs ? {},
   }:
     inputs.nixpkgs.lib.nixosSystem {
-      inherit modules system;
+      inherit system;
+      #? added nix.nixPath for lsp
+      modules =  modules ++ [{ nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];}];
       pkgs = mkPkgs {inherit system allowUnfree;};
       specialArgs =
         specialArgs

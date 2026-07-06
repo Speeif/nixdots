@@ -15,10 +15,7 @@ in {
   #
   # As this is also how 'vscode' was designed to be, I conscribe it to a fault
   # in system philosophy, and may later try other code editing tools.
-  flake.homeModules."${moduleName}" = {
-    pkgs,
-    ...
-  }: let
+  flake.homeModules."${moduleName}" = {pkgs, ...}: let
   in {
     home.packages = with pkgs; [
       alejandra
@@ -42,6 +39,7 @@ in {
           eamodio.gitlens
           usernamehw.errorlens
           gruntfuggly.todo-tree
+          aaron-bond.better-comments
           # linting
           esbenp.prettier-vscode
 
@@ -92,9 +90,9 @@ in {
           "nix.formatterPath" = nixFormatter;
           "nix.serverPath" = nixLanguageServer;
           "nix.serverSettings"."nixd" = {
-            # "formatting"."command" = [nixFormatter];
+            "formatting"."command" = [nixFormatter];
             "options" = let
-              flake =  "(builtins.getFlake \"${self}\")";
+              flake = "(builtins.getFlake \"${self}\")";
               host = "laptop";
               myOptions = "${flake}.nixosConfigurations.${host}.options";
             in {
@@ -108,6 +106,11 @@ in {
 
           "workbench.iconTheme" = "catppuccin-mocha";
           "workbench.colorTheme" = "Catppuccin Mocha";
+
+          # languages
+          "[nix]" = {
+            "editor.defaultFormatter" = "jnoortheen.nix-ide";
+          };
         };
       };
     };

@@ -42,9 +42,6 @@ in {
           niri
           gnome
           gnome-keyring
-          {
-            nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
-          }
         ]
         ++ [
           # actual packages
@@ -64,9 +61,6 @@ in {
         [
           # setup
           homeBase
-          {
-            nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
-          }
         ]
         ++ [
           private
