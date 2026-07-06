@@ -1,5 +1,4 @@
-{ lib, ... }:
-{
+{lib, ...}: {
   niri-commands = with lib; {
     bar = {
       start = mkOption {

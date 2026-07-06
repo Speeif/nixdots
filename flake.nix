@@ -30,21 +30,18 @@
     import-tree.url = "github:vic/import-tree";
   };
 
-  outputs =
-    inputs@{
-      flake-parts,
-      home-manager,
-      import-tree,
-
-      ...
-    }:
-    let
-      myLib = import ./library.nix { inherit inputs; };
-      #? flakeDir is used for linking config files (e.g. vscode settings.json)
-      #? since the home-manager.lib.mkOutOfStoreSymlink needs a root path
-      flakeDir = "${builtins.getEnv "PWD"}";
-    in
-    flake-parts.lib.mkFlake { inherit inputs; } {
+  outputs = inputs @ {
+    flake-parts,
+    home-manager,
+    import-tree,
+    ...
+  }: let
+    myLib = import ./library.nix {inherit inputs;};
+    #? flakeDir is used for linking config files (e.g. vscode settings.json)
+    #? since the home-manager.lib.mkOutOfStoreSymlink needs a root path
+    flakeDir = "${builtins.getEnv "PWD"}";
+  in
+    flake-parts.lib.mkFlake {inherit inputs;} {
       systems = [
         "x86_64-linux"
       ];
@@ -57,15 +54,15 @@
         flakeDir = "/home/speeif/nix/flake";
       };
 
-      imports = [
-        flake-parts.flakeModules.modules
-        home-manager.flakeModules.home-manager
-
-      ]
-      ++ [ (import-tree ./modules) ] # import all flake-parts
-      ++ [
-        # hosts
-        ./hosts/laptop.nix
-      ];
+      imports =
+        [
+          flake-parts.flakeModules.modules
+          home-manager.flakeModules.home-manager
+        ]
+        ++ [(import-tree ./modules)] # import all flake-parts
+        ++ [
+          # hosts
+          ./hosts/laptop.nix
+        ];
     };
 }

@@ -1,5 +1,4 @@
-{ inputs, ... }:
-let
+{inputs, ...}: let
   # catppuccin mocha
   themeHashed = {
     base00 = "#24273a"; # base
@@ -20,20 +19,17 @@ let
     base0F = "#f0c6c6"; # flamingo
   };
 
-  stripHash =
-    str:
-    if builtins.substring 0 1 str == "#" then
-      builtins.substring 1 (builtins.stringLength str - 1) str
-    else
-      str;
+  stripHash = str:
+    if builtins.substring 0 1 str == "#"
+    then builtins.substring 1 (builtins.stringLength str - 1) str
+    else str;
 
   theme = builtins.mapAttrs (_: v: stripHash v) themeHashed;
-in
-{
+in {
   options = {
     flake = inputs.flake-parts.lib.mkSubmoduleOptions {
       wrapperModules = inputs.nixpkgs.lib.mkOption {
-        default = { };
+        default = {};
       };
     };
   };

@@ -1,10 +1,7 @@
-{ ... }:
-{
-  flake.homeModules."niri-swaylock" =
-    { pkgs, ... }:
-    {
-      programs.swaylock = {
-        enable = true;
-      };
+{...}: {
+  flake.homeModules."niri-swaylock" = {pkgs, ...}: {
+    programs.swaylock = {
+      enable = true;
     };
+  };
 }

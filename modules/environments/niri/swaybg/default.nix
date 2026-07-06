@@ -1,8 +1,5 @@
-{ ... }:
-{
-  flake.homeModules."niri-swaybg" =
-    { pkgs, ... }:
-    {
-      programs.swaybg.enable = true;
-    };
+{...}: {
+  flake.homeModules."niri-swaybg" = {pkgs, ...}: {
+    programs.swaybg.enable = true;
+  };
 }

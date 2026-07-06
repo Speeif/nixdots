@@ -3,11 +3,9 @@
   lib,
   self,
   ...
-}:
-let
+}: let
   theme = self.themeHashed;
-in
-{
+in {
   #? Taken from github:vimjoyer/nixconf
   #? https://github.com/vimjoyer/nixconf/blob/af218435ce14b8a974d0409dcd116e575f117262/wrappedPrograms/wlr-which-key/default.nix
   flake.wrapperModules."wrapped-which-key" = inputs.wrappers.lib.wrapModule (
@@ -15,11 +13,9 @@ in
       config,
       lib,
       ...
-    }:
-    let
-      yamlFormat = config.pkgs.formats.yaml { };
-    in
-    {
+    }: let
+      yamlFormat = config.pkgs.formats.yaml {};
+    in {
       options = {
         settings = lib.mkOption {
           type = yamlFormat.type;
@@ -32,21 +28,20 @@ in
       config = {
         package = config.pkgs.wlr-which-key;
 
-        args =
-          let
-            fullSettings = config.settings // {
+        args = let
+          fullSettings =
+            config.settings
+            // {
               menu = config.menu;
             };
-          in
-          [
-            (toString (yamlFormat.generate "config.yaml" fullSettings))
-          ];
+        in [
+          (toString (yamlFormat.generate "config.yaml" fullSettings))
+        ];
       };
     }
   );
 
-  flake.mkWhichKey =
-    pkgs: menu:
+  flake.mkWhichKey = pkgs: menu:
     (self.wrapperModules."wrapped-which-key".apply {
       inherit pkgs menu;
       settings = {

@@ -1,8 +1,5 @@
-{ ... }:
-{
-  flake.homeModules."obsidian" =
-    { pkgs, ... }:
-    {
-      programs.obsidian.enable = true;
-    };
+{...}: {
+  flake.homeModules."obsidian" = {pkgs, ...}: {
+    programs.obsidian.enable = true;
+  };
 }
