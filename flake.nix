@@ -3,9 +3,9 @@
 
   inputs = {
     nixpkgs-unstable.url = "github:NixOs/nixpkgs/nixos-unstable";
-    nixpkgs.url = "github:NixOs/nixpkgs/nixos-25.11";
+    nixpkgs.url = "github:NixOs/nixpkgs/nixos-26.05";
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.11";
+      url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # Remove or use own private repo if not me!
@@ -19,8 +19,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    #! is the package for wrapping self-contained modules, like `packages.vscode`
     wrappers = {
-      url = "github:Lassulus/wrappers/3819a607b845cc1ef492a6682970b17ac83ebdaf?narHash=sha256-AkOIcYzvVtoLQzrvdEeSEH/dvgVxvbJcKpKGHu8l67w%3D";
+      url = "github:Lassulus/wrappers";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -34,6 +35,7 @@
       flake-parts,
       home-manager,
       import-tree,
+
       ...
     }:
     let
@@ -44,7 +46,7 @@
     in
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [
-        "x86_64-linux" # todo: update for "x86_64-darwin"
+        "x86_64-linux"
       ];
 
       _module.args = {
@@ -71,6 +73,7 @@
       imports = [
         flake-parts.flakeModules.modules
         home-manager.flakeModules.home-manager
+
       ]
       ++ [ (import-tree ./modules) ] # import all flake-parts
       ++ [

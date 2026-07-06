@@ -1,59 +1,64 @@
-{ flakeDir, ... }:
 {
-  flake.homeModules."vscode" =
+  flakeDir,
+  inputs,
+  self,
+  self',
+  ...
+}:
+let
+  moduleName = "vscode";
+in
+{
+  flake.homeModules."${moduleName}" =
+    { pkgs, config, ... }:
+    {
+      programs.vscodium = {
+        enable = true;
+        package = self.packages."${pkgs.system}"."${moduleName}";
+
+        profiles.default = {
+          enableUpdateCheck = false;
+          enableExtensionUpdateCheck = false;
+          userSettings.source = ./settings.json;
+        };
+        # keybindings.source = ./keybinding.json;
+      };
+    };
+
+  perSystem =
     {
       pkgs,
-      pkgs-unstable,
       config,
+      lib,
       ...
     }:
-    let
-      mkLink = file: config.lib.file.mkOutOfStoreSymlink "${flakeDir}/modules/programs/vscode/${file}";
-    in
     {
-
-      xdg.configFile."Code/User/settings.json".source = mkLink "settings.json";
-      xdg.configFile."Code/User/keybindings.json".source = mkLink "keybindings.json";
-
-      home.packages = [
-        pkgs.nixd # language server
-        pkgs.nixfmt-rfc-style # formatter
-        pkgs.shfmt # shell formatter ()
-        pkgs.nix-direnv
-        pkgs.direnv
-        pkgs.nix-ld
-      ];
-
-      programs.vscode = {
-        enable = true;
-        package = pkgs-unstable.vscode.fhs;
-        profiles.default = {
-          extensions =
-            with pkgs.vscode-extensions;
-            [
-              # nix
-              bbenoist.nix # Nix language support
-              pkgs.vscode-extensions.bbenoist.nix
-              jnoortheen.nix-ide
-              # Themes
-              catppuccin.catppuccin-vsc
-              catppuccin.catppuccin-vsc-icons
-              # Editor versatility and formatters
-              esbenp.prettier-vscode
-              editorconfig.editorconfig
-              aaron-bond.better-comments
-            ]
-            ++ [
-              # flutter
-              dart-code.flutter
-              dart-code.dart-code
-              alexisvt.flutter-snippets
-              fill-labs.dependi
-              # js
-              # todo: not working
-              # orta.vscode-jest
-            ];
-        };
+      packages."${moduleName}" = inputs.wrappers.lib.wrapPackage {
+        inherit pkgs;
+        package =
+          with pkgs;
+          vscode-with-extensions.override {
+            vscode = vscodium;
+            #! Remember: `attribute 'vscodeExtUniqueId' missing` means that an extension was not found.
+            vscodeExtensions =
+              with vscode-extensions;
+              [
+                # Nix
+                bbenoist.nix
+                jnoortheen.nix-ide
+              ]
+              ++ [
+                # Themes   # Editor versatility and formatters
+                catppuccin.catppuccin-vsc
+                catppuccin.catppuccin-vsc-icons
+              ]
+              ++ [
+                # Editing extensions
+                esbenp.prettier-vscode
+                editorconfig.editorconfig
+                aaron-bond.better-comments
+              ];
+          };
       };
     };
 }

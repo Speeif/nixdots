@@ -32,6 +32,7 @@
       "  flakeDir,",
       "  inputs,",
       "  self',",
+      "  ...",
       "}:",
       "let",
       "  moduleName = \"$1\";",

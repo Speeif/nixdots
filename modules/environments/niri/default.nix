@@ -278,11 +278,11 @@ in
                   spawn-sh = "${playerctl} next";
                 };
                 "XF86MonBrightnessUp" = mkAllowedWhenLocked {
-                  spawn-sh = "${brightnessctl} --class=backlight set +10%";
+                  spawn-sh = "${brightnessctl} --class=backlight -q s 10%+";
                 };
 
                 "XF86MonBrightnessDown" = mkAllowedWhenLocked {
-                  spawn-sh = "${brightnessctl} --class=backlight set -10%";
+                  spawn-sh = "${brightnessctl} --class=backlight -q s 10%-";
                 };
               }
               # Navigation
