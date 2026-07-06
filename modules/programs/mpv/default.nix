@@ -8,7 +8,7 @@ in
     {
       programs.mpv = {
         enable = true;
-        package = self.packages."${pkgs.system}"."${moduleName}";
+        package = self.packages."${pkgs.stdenv.hostPlatform.system}"."${moduleName}";
       };
     };
 

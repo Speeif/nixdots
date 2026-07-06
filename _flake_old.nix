@@ -40,7 +40,9 @@
         "laptop" =
           let
             system = "x86_64-linux";
-            pkgs = myLib.mkPkgs { inherit system nixpkgs; };
+            pkgs = myLib.mkPkgs { 
+              inherit system nixpkgs;
+               };
           in
           nixpkgs.lib.nixosSystem {
             inherit system pkgs;

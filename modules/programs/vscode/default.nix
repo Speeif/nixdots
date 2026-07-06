@@ -14,12 +14,12 @@ in
     {
       programs.vscodium = {
         enable = true;
-        package = self.packages."${pkgs.system}"."${moduleName}";
+        package = self.packages."${pkgs.stdenv.hostPlatform.system}"."${moduleName}";
 
         profiles.default = {
           enableUpdateCheck = false;
           enableExtensionUpdateCheck = false;
-          userSettings.source = ./settings.json;
+          userSettings.content = builtins.readFile ./settings.json;
         };
         # keybindings.source = ./keybinding.json;
       };

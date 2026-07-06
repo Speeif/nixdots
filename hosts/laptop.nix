@@ -2,6 +2,7 @@
   flakeDir,
   myLib,
   self,
+  inputs,
   ...
 }:
 let
@@ -84,6 +85,13 @@ in
             userhome
             ;
         };
+      };
+    };
+
+    perSystem = { system, ...}: {
+      _module.args.pkgs = myLib.mkPkgs {
+        inherit (inputs) nixpkgs;
+        inherit system allowUnfree;
       };
     };
 }

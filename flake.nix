@@ -57,19 +57,6 @@
         flakeDir = "/home/speeif/nix/flake";
       };
 
-      perSystem =
-        { system, ... }:
-        {
-          _module.args = {
-            pkgs = import inputs.nixpkgs {
-              inherit system;
-            };
-            pkgs-unstable = import inputs.nixpkgs-unstable {
-              inherit system;
-            };
-          };
-        };
-
       imports = [
         flake-parts.flakeModules.modules
         home-manager.flakeModules.home-manager
