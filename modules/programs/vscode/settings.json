@@ -27,65 +27,45 @@
   "telemetry.enableTelemetry": false,
   "telemetry.telemetryLevel": "off",
   "telemetry.feedback.enabled": false,
+  "extensions.autoCheckUpdates": false,
+  "extensions.autoUpdate": false,
 
   // theme
   "workbench.iconTheme": "catppuccin-mocha",
   "[go]": {
-    "editor.defaultFormatter": "golang.go",
+    "editor.defaultFormatter": "golang.go"
   },
-  // Nix development configuration
-  "[nix]": {
-    "editor.defaultFormatter": "jnoortheen.nix-ide",
-    "editor.formatOnSave": true,
-  },
-  "nix.enableLanguageServer": true,
-  "nix.formatterPath": [
-    "nixpkgs-fmt",
-    "nixfmt",
-    "treefmt",
-    "--stdin",
-    "{file}",
-    "nix",
-    "fmt",
-    "--",
-    "-",
-  ],
   "nix.serverPath": "nixd",
+  "nix.enableLanguageServer": true,
+  "nix.formatterPath": "alejandra",
   "nix.serverSettings": {
     "nixd": {
       "formatting": {
-        "command": ["nixfmt"],
-      },
-      "nixpkgs": {
-        "expr": "import (builtins.getFlake \"/home/speeif/nix/flake\").inputs.nixpkgs {}",
+        "command": ["alejandra"]
       },
       "options": {
-        "home_manager": {
-          "expr": "(builtins.getFlake \"/home/speeif/nix/flake\").homeConfigurations.leasure.options",
-        },
         "nixos": {
-          "expr": "(builtins.getFlake \"/home/speeif/nix/flake\").nixosConfigurations.laptop.options",
+          "expr": "(builtins.getFlake \"/home/speeif/nix/flake\").nixosConfigurations.laptop.options"
         },
-      },
-    },
+        "home_manager": {
+          "expr": "(builtins.getFlake \"/home/speeif/nix/flake\").homeConfigurations.laptop.options"
+        }
+      }
+    }
+  },
+  "[nix]": {
+    "editor.defaultFormatter": "jnoortheen.nix-ide"
   },
   "[jsonc]": {
     "prettier.trailingComma": "all",
     "editor.quickSuggestions": {
-      "strings": true,
+      "strings": true
     },
-    "editor.suggest.insertMode": "replace",
+    "editor.suggest.insertMode": "replace"
   },
-  "omnisharp.useModernNet": true,
-  "dotnetAcquisitionExtension.existingDotnetPath": [
-    {
-      "extensionId": "ms-dotnettools.csharp",
-      "path": "/nix/store/msq6k9knc3iq0arjw6pdq1vwliqnrc7z-dotnet-sdk-wrapped-10.0.103/bin/dotnet",
-    },
-  ],
-  "razor.dotnetPath": "/nix/store/msq6k9knc3iq0arjw6pdq1vwliqnrc7z-dotnet-sdk-wrapped-10.0.103/bin/dotnet",
   "[csharp]": {
-    "editor.defaultFormatter": "ms-dotnettools.csharp",
+    "editor.defaultFormatter": "ms-dotnettools.csharp"
   },
   "explorer.confirmDragAndDrop": false,
+  "workbench.colorTheme": "Catppuccin Mocha"
 }
