@@ -5,11 +5,7 @@
 # --flake cause flake
 .PHONY: home
 home:
-	home-manager switch --impure -b bak --flake .#nixos --verbose
-
-.PHONY: mac
-mac:
-	home-manager switch --impure -b bak --flake .#mac
+	home-manager switch --impure -b bak --flake .#laptop --verbose
 
 # Only use with nixos as OS.
 # As hardware configuration should stay unchanged once installed (imo),
@@ -19,14 +15,9 @@ mac:
 # --flake cause flake
 .PHONY: system
 system:
-	nixos-rebuild switch --impure --flake .#nixos --verbose
+	nixos-rebuild switch --impure --flake .#laptop --verbose
 
 # Cleans nix home-manager cache. Run with `sudo` to clean system-level cache.
 .PHONY: clean
 clean:
 	nix-collect-garbage -d
-
-# updates the reference to private modules, in calse main has changed
-.PHONY: update
-update:
-	nix flake update private-modules

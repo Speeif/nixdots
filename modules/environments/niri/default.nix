@@ -3,7 +3,7 @@
   inputs,
   ...
 }: let
-  moduleName = "myNiri";
+  moduleName = "niri";
 in {
   flake.nixosModules."${moduleName}" = {
     pkgs,

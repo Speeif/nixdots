@@ -1,5 +1,5 @@
 {self, ...}: {
-  flake.nixosmOdules."default-cli" = {...}: {
+  flake.nixosModules."default-cli" = {...}: {
     imports = with self.nixosModules; [
       shell-zsh
     ];

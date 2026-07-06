@@ -23,7 +23,7 @@ in {
     hostname = "hermes";
     userhome = "/home/${username}";
   in {
-    nixosConfigurations."nixos" = myLib.mkNixos "x86_64-linux" {
+    nixosConfigurations."laptop" = myLib.mkNixos "x86_64-linux" {
       inherit allowUnfree;
       specialArgs = {
         inherit
@@ -39,9 +39,12 @@ in {
           /etc/nixos/hardware-configuration.nix
           gpu-amd
           systemBase
-          myNiri
+          niri
           gnome
           gnome-keyring
+          {
+            nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
+          }
         ]
         ++ [
           # actual packages
@@ -55,12 +58,15 @@ in {
         ];
     };
 
-    homeConfigurations."nixos" = myLib.mkHome "x86_64-linux" {
+    homeConfigurations."laptop" = myLib.mkHome "x86_64-linux" {
       inherit allowUnfree;
       modules = with self.homeModules;
         [
           # setup
           homeBase
+          {
+            nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
+          }
         ]
         ++ [
           private

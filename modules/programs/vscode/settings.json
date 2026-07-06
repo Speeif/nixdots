@@ -35,27 +35,42 @@
   "[go]": {
     "editor.defaultFormatter": "golang.go"
   },
-  "nix.serverPath": "nixd",
+    // Nix settings
   "nix.enableLanguageServer": true,
-  "nix.formatterPath": "alejandra",
+  "nix.formatterPath": [
+    "nixpkgs-fmt",
+    "nixfmt",
+    "treefmt",
+    "--stdin",
+    "{file}",
+    "nix",
+    "fmt",
+    "--",
+    "-"
+  ],
+  "nix.serverPath": "nixd",
   "nix.serverSettings": {
     "nixd": {
       "formatting": {
-        "command": ["alejandra"]
+        "command": [
+          "nixpkgs-fmt"
+        ]
+      },
+      "nixpkgs": {
+        "expr": "import (builtins.getFlake \"${workspaceFolder}\").inputs.nixpkgs {}"
       },
       "options": {
-        "nixos": {
-          "expr": "(builtins.getFlake \"/home/speeif/nix/flake\").nixosConfigurations.laptop.options"
-        },
         "home_manager": {
-          "expr": "(builtins.getFlake \"/home/speeif/nix/flake\").homeConfigurations.laptop.options"
+         /*the below is for those who directly integrate their home manager into nixos, what others use is for stand alone home manager*/
+          "expr": "(builtins.getFlake \"${workspaceFolder}\").nixosConfigurations.<name>.options.home-manager.users.type.getSubOptions []"
+        },
+        "nixos": {
+          "expr": "(builtins.getFlake \"${workspaceFolder}\").nixosConfigurations.<name>.options"
         }
       }
     }
   },
-  "[nix]": {
-    "editor.defaultFormatter": "jnoortheen.nix-ide"
-  },
+
   "[jsonc]": {
     "prettier.trailingComma": "all",
     "editor.quickSuggestions": {
@@ -67,5 +82,8 @@
     "editor.defaultFormatter": "ms-dotnettools.csharp"
   },
   "explorer.confirmDragAndDrop": false,
-  "workbench.colorTheme": "Catppuccin Mocha"
+  "workbench.colorTheme": "Catppuccin Mocha",
+  "[nix]": {
+    "editor.defaultFormatter": "jnoortheen.nix-ide"
+  }
 }

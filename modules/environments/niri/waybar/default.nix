@@ -2,22 +2,10 @@
   flakeDir,
   inputs,
   self,
-  self',
   ...
 }: let
   moduleName = "niri-waybar";
 in {
-  flake.homeModules."${moduleName}" = {
-    pkgs,
-    config,
-    ...
-  }: {
-    programs.waybar = {
-      enable = true;
-      package = self'.packages "${moduleName}";
-    };
-  };
-
   perSystem = {
     pkgs,
     lib,

@@ -1,8 +1,6 @@
 {
-  flakeDir,
   inputs,
   self,
-  self',
   ...
 }: let
   moduleName = "vscode";
@@ -19,23 +17,101 @@ in {
   # in system philosophy, and may later try other code editing tools.
   flake.homeModules."${moduleName}" = {
     pkgs,
-    config,
     ...
   }: let
-    mkConfLink = target: config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/${target}";
   in {
     home.packages = with pkgs; [
       alejandra
       nixd
     ];
-    nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
-    xdg.configFile."VSCodium/User/keybindings.json".source = mkConfLink "/nix/flake/modules/programs/vscode/keybindings.json";
-    xdg.configFile."VSCodium/User/settings.json".source = mkConfLink "/nix/flake/modules/programs/vscode/settings.json";
+    # xdg.configFile."VSCodium/User/keybindings.json".source =
+    #   mkConfLink "/nix/flake/modules/programs/vscode/keybindings.json";
+    # xdg.configFile."VSCodium/User/settings.json".source =
+    #   mkConfLink "/nix/flake/modules/programs/vscode/settings.json";
+
     programs.vscodium = {
       enable = true;
       package = pkgs.vscodium-fhs;
-      # keybindings.source = ./keybinding.json;
+      profiles.default = {
+        extensions = with pkgs.vscode-extensions; [
+          # Essentials
+          mikestead.dotenv
+          editorconfig.editorconfig
+
+          # Interface Improvements
+          eamodio.gitlens
+          usernamehw.errorlens
+          gruntfuggly.todo-tree
+          # linting
+          esbenp.prettier-vscode
+
+          # Nix
+          jnoortheen.nix-ide
+          arrterian.nix-env-selector
+
+          # theming
+          catppuccin.catppuccin-vsc
+          catppuccin.catppuccin-vsc-icons
+        ];
+        userSettings = let
+          nixFormatter = "${pkgs.alejandra}/bin/alejandra";
+          nixLanguageServer = "${pkgs.nixd}/bin/nixd";
+        in {
+          "workbench.editor.closeOnFileDelete" = true;
+          "explorer.autoReveal" = true;
+          "editor.wordWrap" = "on";
+          "editor.minimap.enabled" = false;
+          "editor.stickyScroll.enabled" = true;
+          "editor.renderWhitespace" = "trailing";
+          # git
+          "git.mergeEditor" = true;
+          "git.autofetch" = true;
+          # formatting on save
+          "files.autoSave" = "off";
+          "editor.formatOnSave" = true;
+          "editor.defaultFormatter" = "esbenp.prettier-vscode";
+          # bracket color pairs
+          "editor.bracketPairColorization.enabled" = true;
+          "editor.matchBrackets" = "near";
+          "editor.guides.bracketPairs" = true;
+          "window.title" = "$${dirty}$${activeEditorShort}$${separator}$${rootNameShort}";
+          "window.menuBarVisibility" = "toggle"; # press alt to toggl
+          "window.commandCenter" = false;
+          "window.titleBarStyle" = "native";
+          "workbench.layoutControl.enabled" = false;
+
+          # disable telemetry
+          "telemetry.enableCrashReporter" = false;
+          "telemetry.enableTelemetry" = false;
+          "telemetry.telemetryLevel" = "off";
+          "telemetry.feedback.enabled" = false;
+          "extensions.autoCheckUpdates" = false;
+          "extensions.autoUpdate" = false;
+
+          "nix.enableLanguageServer" = true;
+          "nix.formatterPath" = nixFormatter;
+          "nix.serverPath" = nixLanguageServer;
+          "nix.serverSettings"."nixd" = {
+            # "formatting"."command" = [nixFormatter];
+            "options" = let
+              flake =  "(builtins.getFlake \"${self}\")";
+              host = "laptop";
+              myOptions = "${flake}.nixosConfigurations.${host}.options";
+            in {
+              # nixpgs.expr = "import ${inputs.nixpkgs} { }";
+              nixos.expr = myOptions;
+              # home-manager.expr = myOptions + ".home-manager.users.type.getSubOptions []";
+              home-manager.expr = "${flake}.homeConfigurations.${host}.options";
+              # flake-parts.expr = "${flake}.debug.options";
+            };
+          };
+
+          "workbench.iconTheme" = "catppuccin-mocha";
+          "workbench.colorTheme" = "Catppuccin Mocha";
+        };
+      };
     };
+
     programs.direnv = {
       enable = true;
       enableBashIntegration = true;

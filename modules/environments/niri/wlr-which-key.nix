@@ -47,7 +47,7 @@ in {
       settings = {
         font = "JetBrainsMono Nerd Font 12";
         anchor = "center";
-        background = theme.base02;
+        background = theme.base01;
         color = theme.base05;
         border = theme.base0D;
         border_width = 2;

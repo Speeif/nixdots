@@ -37,11 +37,10 @@
     ...
   }: let
     myLib = import ./library.nix {inherit inputs;};
-    #? flakeDir is used for linking config files (e.g. vscode settings.json)
-    #? since the home-manager.lib.mkOutOfStoreSymlink needs a root path
-    flakeDir = "${builtins.getEnv "PWD"}";
   in
     flake-parts.lib.mkFlake {inherit inputs;} {
+      debug = true;
+      
       systems = [
         "x86_64-linux"
       ];
