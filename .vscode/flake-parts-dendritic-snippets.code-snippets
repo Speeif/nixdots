@@ -29,7 +29,6 @@
     "prefix": "dendritic",
     "body": [
       "{",
-      "  flakeDir,",
       "  inputs,",
       "  self,",
       "  ...",
