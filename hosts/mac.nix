@@ -4,10 +4,6 @@
   self,
   ...
 }: {
-  imports = [
-    ./base/default.nix
-  ];
-
   flake = let
     allowUnfree = [
       "vscode"
