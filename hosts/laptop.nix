@@ -13,11 +13,6 @@
     "replace"
   ];
 in {
-  imports = [
-    ./base/default.nix
-    ./gpu/amd.nix
-  ];
-
   flake = let
     username = "speeif";
     hostname = "hermes";

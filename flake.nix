@@ -40,7 +40,7 @@
   in
     flake-parts.lib.mkFlake {inherit inputs;} {
       debug = true;
-      
+
       systems = [
         "x86_64-linux"
       ];
@@ -59,6 +59,7 @@
           home-manager.flakeModules.home-manager
         ]
         ++ [(import-tree ./modules)] # import all flake-parts
+        ++ [(import-tree ./hosts)] # import all hosts
         ++ [
           # hosts
           ./hosts/laptop.nix

@@ -13,6 +13,7 @@
     imports = with self.nixosModules; [
       sound
       keyboard
+      bluetooth
       localization
       networking
       boot
