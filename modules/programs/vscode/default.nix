@@ -20,6 +20,7 @@ in {
     home.packages = with pkgs; [
       alejandra
       nixd
+      nix-direnv
     ];
     # xdg.configFile."VSCodium/User/keybindings.json".source =
     #   mkConfLink "/nix/flake/modules/programs/vscode/keybindings.json";
@@ -51,6 +52,33 @@ in {
           catppuccin.catppuccin-vsc
           catppuccin.catppuccin-vsc-icons
         ];
+
+        keybindings = [
+          {
+            "key" = "ctrl+n";
+            "command" = "-workbench.action.chat.newChat";
+            "when" = "chatIsEnabled && inChat && chatLocation == 'panel'";
+          }
+          {
+            "key" = "ctrl+n";
+            "command" = "-workbench.action.openChat";
+            "when" = "chatIsEnabled && inChat && inChatEditor";
+          }
+          {
+            "key" = "ctrl+n";
+            "command" = "-chatEditor.action.undoHunk";
+            "when" = "chatEdits.cursorInChangeRange && chatEdits.hasEditorModifications && editorFocus && !chatEdits.isCurrentlyBeingModified || chatEdits.cursorInChangeRange &&chatEdits.hasEditorModifications && notebookCellListFocused && !chatEdits.isCurrentlyBeingModified";
+          }
+          {
+            "key" = "ctrl+n";
+            "command" = "-workbench.action.files.newUntitledFile";
+          }
+          {
+            "key" = "ctrl+n";
+            "command" = "explorer.newFile";
+          }
+        ];
+
         userSettings = let
           nixFormatter = "${pkgs.alejandra}/bin/alejandra";
           nixLanguageServer = "${pkgs.nixd}/bin/nixd";
