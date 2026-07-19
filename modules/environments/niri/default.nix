@@ -5,14 +5,8 @@
 }: let
   moduleName = "niri";
 in {
-  flake.nixosModules."${moduleName}" = {
-    pkgs,
-    config,
-    ...
-  }: {
+  flake.nixosModules."${moduleName}" = {pkgs, ...}: {
     security.polkit.enable = true; # polkit
-    environment.systemPackages = with pkgs; [
-    ];
     programs.niri = {
       enable = true;
       package = self.packages."${pkgs.stdenv.hostPlatform.system}"."${moduleName}";
@@ -21,7 +15,6 @@ in {
 
   perSystem = {
     pkgs,
-    config,
     lib,
     self',
     ...

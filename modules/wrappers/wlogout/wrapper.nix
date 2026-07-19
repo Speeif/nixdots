@@ -1,7 +1,5 @@
-{inputs, ...}: let
-  moduleName = "wlogout";
-in {
-  flake.wrapperModules."${moduleName}" = inputs.wrappers.lib.wrapModule (
+{inputs, ...}: {
+  flake.wrapperModules."wlogout" = inputs.wrappers.lib.wrapModule (
     {
       config,
       lib,
