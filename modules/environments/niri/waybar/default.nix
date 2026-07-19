@@ -8,6 +8,7 @@
 in {
   perSystem = {
     pkgs,
+    self',
     lib,
     ...
   }: {
@@ -41,11 +42,13 @@ in {
           "group/left1"
           "group/left2"
           "group/left3"
+          "custom/spacer-left"
         ];
         modules-center = [
           "niri/window"
         ];
         modules-right = [
+          "custom/spacer-right"
           "bluetooth"
           "backlight"
           "custom/seperator"
@@ -103,7 +106,7 @@ in {
         };
         "custom/system" = {
           format = "";
-          on-click = "${lib.getExe pkgs.wlogout}";
+          on-click = "${lib.getExe self'.packages.wlogout}";
         };
         "niri/workspaces" = {
           format = "{icon}";
@@ -263,6 +266,12 @@ in {
         };
         "custom/seperator" = {
           format = " ";
+        };
+        "custom/spacer-left" = {
+          "format" = " ";
+        };
+        "custom/spacer-right" = {
+          "format" = " ";
         };
       };
 
