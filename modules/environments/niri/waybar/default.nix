@@ -14,7 +14,7 @@ in {
     packages."${moduleName}" = inputs.wrapperModules.wrappers.waybar.wrap {
       inherit pkgs;
       settings = let
-        launchTui = tui: "bash -c \"${lib.getExe pkgs.kitty} -e ${tui}\"";
+        launchTui = tui: "bash -c \"${lib.getExe pkgs.kitty} --app-id=tui-menu -e ${tui}\"";
         progressIcons = [
           "󰝦"
           "󰪞"
@@ -183,7 +183,7 @@ in {
           tooltip-format-disconnected = "Disconnected";
           interval = 3;
           nospacing = 1;
-          on-click = launchTui "${lib.getExe' pkgs.networkmanager "nmtui"}";
+          on-click = launchTui "${lib.getExe' self.packages."${pkgs.stdenv.system}".wifitui "wifitui"}";
         };
         bluetooth = {
           format = "BT {icon}";

@@ -310,6 +310,30 @@ in {
               "Mod+Shift+E".quit = _: {};
             }
           ];
+
+        window-rules = [
+          {
+            matches = [{app-id = "tui-menu";}];
+            open-focused = true;
+            open-floating = true;
+
+            default-column-width = {
+              fixed = 900;
+            };
+
+            default-window-height = {
+              fixed = 600;
+            };
+          }
+        ];
+
+        # layer-rules = [
+        #   {
+        #     matches = [{namespace = "^notifications$";}];
+        #     block-out-from = "screen-capture";
+        #     opacity = 0.8;
+        #   }
+        # ];
       };
     };
   };
