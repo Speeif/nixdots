@@ -114,8 +114,8 @@ in {
             browser = "";
             discord = "";
             chat = "<b></b>";
-            active = "";
-            default = "";
+            active = "";
+            default = "";
           };
         };
         "niri/window" = {

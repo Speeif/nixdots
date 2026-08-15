@@ -34,13 +34,17 @@ window#waybar {
 }
 
 .module#custom-spacer-left {
-  background-image: linear-gradient(300deg, transparent 12px, @base01 12px);
+  background-image: linear-gradient(315deg, transparent 17px, @base01 17px);
   background-color: transparent;
+  border-bottom: none;
+  min-width: 12px;
 }
 
 .module#custom-spacer-right {
-  background-image: linear-gradient(60deg, transparent 12px, @base01 12px);
+  background-image: linear-gradient(45deg, transparent 17px, @base01 17px);
   background-color: transparent;
+  border-bottom: none;
+  min-width: 12px;
 }
 
 /* #right1,

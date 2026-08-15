@@ -21,6 +21,9 @@ in {
       alejandra
       nixd
       nix-direnv
+      docker-compose
+      docker-compose-language-service
+      devenv
     ];
     # xdg.configFile."VSCodium/User/keybindings.json".source =
     #   mkConfLink "/nix/flake/modules/programs/vscode/keybindings.json";
@@ -51,6 +54,11 @@ in {
           # theming
           catppuccin.catppuccin-vsc
           catppuccin.catppuccin-vsc-icons
+
+          # golang
+          golang.go
+
+          ms-azuretools.vscode-docker
         ];
 
         keybindings = [
@@ -138,6 +146,9 @@ in {
           # languages
           "[nix]" = {
             "editor.defaultFormatter" = "jnoortheen.nix-ide";
+          };
+          "[go]" = {
+            "editor.defaultFormatter" = "golang.go";
           };
         };
       };

@@ -8,6 +8,7 @@
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     # Remove or use own private repo if not me!
     private-modules = {
       url = "git+ssh://git@github.com/speeif/nixdots-private.git?ref=main";
